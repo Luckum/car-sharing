@@ -1,53 +1,79 @@
 <?php
 
-/* @var $this yii\web\View */
+use yii\helpers\Html;
+use yii\grid\GridView;
+use app\models\User;
 
-$this->title = 'My Yii Application';
+//'htmlFormattedInformation:raw',
+        //getHtmlFormattedInformation()
+        /*return Yii::$app->view->renderFile('@app/modules/site/views/order/snippets/information.php', [
+            'model' => $this,
+        ]);*/
+//$.pjax.reload({container:"#fund-deduction-pjax"});
+$this->title = Yii::$app->name;
 ?>
 <div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+    <div class="site-index-buttons">
+        <?= Html::a('Собрать бригаду', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Добавить рабочего', ['/user/create', 'role' => User::ROLE_WORKER], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Добавить менеджера', ['/user/create', 'role' => User::ROLE_MANAGER], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Список бригад', 'javascript:void();', ['class' => 'btn btn-default']) ?>
     </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
+    <div class="site-index-content">
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'tableOptions' => [
+                'class' => 'table table-striped table-fixed'
+            ],
+            'columns' => [
+                [
+                    'class' => 'yii\grid\SerialColumn',
+                    'header' => '№ п/п',
+                    'headerOptions' => ['width' => '5%'],
+                    'contentOptions' => ['width' => '5%']
+                ],
+                [
+                    'attribute' => 'fullNameColumnHtmlFormatted',
+                    'format' => 'raw',
+                    'headerOptions' => ['width' => '15%'],
+                    'contentOptions' => ['width' => '15%']
+                ],
+                [
+                    'attribute' => 'roleColumnHtmlFormatted',
+                    'format' => 'raw',
+                    'headerOptions' => ['width' => '9%'],
+                    'contentOptions' => ['width' => '9%']
+                ],
+                [
+                    'attribute' => 'brigadeColumnHtmlFormatted',
+                    'format' => 'raw',
+                    'headerOptions' => ['width' => '13%'],
+                    'contentOptions' => ['width' => '13%']
+                ],
+                [
+                    'attribute' => 'ticketsColumnHtmlFormatted',
+                    'format' => 'raw',
+                    'headerOptions' => ['width' => '20%'],
+                    'contentOptions' => ['width' => '20%']
+                ],
+                [
+                    'format' => 'raw',
+                    'header' => 'Фото',
+                    'headerOptions' => ['width' => '20%'],
+                    'contentOptions' => ['width' => '20%'],
+                    'value' => function ($data) {
+                        return !empty($data->avatar) ? Html::img('/uploads/avatars/' . $data->avatar) : '';
+                    }
+                ],
+                [
+                    'attribute' => 'buttonsColumnHtmlFormatted',
+                    'format' => 'raw',
+                    'label' => 'Действия',
+                    'headerOptions' => ['width' => '18%'],
+                    'contentOptions' => ['width' => '18%']
+                ]
+                
+            ],
+        ]); ?>
     </div>
 </div>

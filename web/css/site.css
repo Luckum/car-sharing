@@ -113,3 +113,101 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.login-page {
+    background: #d2d6de;
+}
+.login-box {
+    width: 360px;
+    margin: 7% auto;
+    box-shadow: 0 0 10px 1px #000;
+}
+.login-box-body {
+    background: #fff;
+    padding: 20px;
+    color: #666;
+}
+.login-logo {
+    font-size: 35px;
+    text-align: center;
+    margin-bottom: 35px;
+    font-weight: 300;
+}
+.login-box-msg {
+    margin: 0;
+    text-align: center;
+    padding: 0 20px 20px;
+}
+
+.container {
+	width: 100%;
+}
+.header {
+	padding-top: 20px;
+	height: 120px;
+}
+.header .system-datetime .system-time {
+	text-transform: uppercase;
+}
+.header .user-avatar,
+.header .user-title,
+.header .system-datetime,
+.header .system-buttons {
+	display: inline-block;
+}
+.header .user-avatar {
+	margin-right: 20px;
+}
+.header .system-datetime {
+	margin-left: 25px;
+}
+textarea {
+	resize: none;
+}
+form div.required label.control-label:after {
+  content: " * ";
+  color: red;
+}
+.site-index .site-index-content {
+	margin-top: 25px;
+}
+.site-index .site-index-content table.table {
+	border: 1px solid #ddd;
+}
+.site-index .site-index-content table tr .tr-top,
+.site-index .site-index-content table tr .tr-bottom {
+	height: 140px;
+}
+.site-index .site-index-content table tr .tr-top {
+	vertical-align: top;
+}
+.site-index .site-index-content table tr .tr-bottom {
+	vertical-align: bottom;
+}
+.site-index .site-index-content table tr .tr-bottom td {
+	padding-bottom: 25px;
+}
+table.table-fixed,
+table.table-fixed>thead,
+table.table-fixed>tbody,
+table.table-fixed>thead>tr,
+table.table-fixed>tbody>tr,
+table.table-fixed>thead>tr>th,
+table.table-fixed>tbody>td {
+  display: block;
+}
+table.table-fixed>thead>tr:after,
+table.table-fixed>tbody>tr:after {
+  content: ' ';
+  display: block;
+  visibility: hidden;
+  clear: both;
+}
+table.table-fixed>tbody {
+  overflow-y: scroll;
+  height: 573px;
+}
+table.table-fixed>thead>tr>th,
+table.table-fixed>tbody>tr>td {
+  float: left;
+}
