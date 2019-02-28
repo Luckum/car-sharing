@@ -2,42 +2,89 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\widgets\MaskedInput;
+use app\models\User;
+use app\models\UserProfile;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$title = 'Профиль пользователя: ' . $model->fullName;
+$this->title = Yii::$app->name . ' | ' . $title;
+
 ?>
 <div class="user-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Назад', ['/'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить этого пользователя?',
                 'method' => 'post',
             ],
         ]) ?>
     </p>
 
+    <?php if (!empty($model->avatar)): ?>
+        <p>
+            <?= Html::img(['/uploads/avatars/' . $model->avatar]) ?>
+        </p>
+    <?php endif; ?>
     <?= DetailView::widget([
         'model' => $model,
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter', 
+            'dateFormat' => 'd MMMM y, HH:mm:ss',
+            'locale' => 'ru'
+        ],
         'attributes' => [
-            'id',
-            'role',
             'username',
+            [
+                'attribute' => 'active',
+                'value' => $model->active == User::STATUS_ACTIVE ? "<i class='fa fa-check' style='color: green;'></i>" : "<i class='fa fa-times' style='color: red;'></i>",
+                'format' => 'raw'
+            ],
+            [
+                'attribute' => 'role',
+                'value' => $model->roleRu
+            ],
+            [
+                'attribute' => 'fullNameColumnHtmlFormatted',
+                'value' => $model->fullName
+            ],
             'email:email',
-            'firstname',
-            'midname',
-            'lastname',
-            'avatar',
-            'active',
-            'created_at',
+            [
+                'attribute' => UserProfile::instance()->getAttributeLabel('phone'),
+                'value' => isset($model->userProfile) ? preg_replace("/^(\d{1})(\d{3})(\d{3})(\d{4})$/", "+$1 ($2)-$3-$4", $model->userProfile->phone) : '',
+            ],
+            [
+                'attribute' => UserProfile::instance()->getAttributeLabel('city'),
+                'value' => isset($model->userProfile) ? $model->userProfile->city : '',
+            ],
+            [
+                'attribute' => UserProfile::instance()->getAttributeLabel('address_line'),
+                'value' => isset($model->userProfile) ? $model->userProfile->address_line : '',
+            ],
+            [
+                'attribute' => UserProfile::instance()->getAttributeLabel('whatsapp_account'),
+                'value' => isset($model->userProfile) ? $model->userProfile->whatsapp_account : '',
+            ],
+            [
+                'attribute' => UserProfile::instance()->getAttributeLabel('telegram_account'),
+                'value' => isset($model->userProfile) ? $model->userProfile->telegram_account : '',
+            ],
+            [
+                'attribute' => UserProfile::instance()->getAttributeLabel('comment'),
+                'value' => isset($model->userProfile) ? $model->userProfile->comment : '',
+                'format' => 'ntext'
+            ],
+            
+            'created_at:date',
+            
         ],
     ]) ?>
 

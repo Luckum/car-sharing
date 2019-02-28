@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\User;
 use app\models\UserSearch;
+use app\models\UserProfile;
 use app\helpers\ImageHelper;
 use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
@@ -100,13 +101,46 @@ class UserController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_profile = UserProfile::find()->where(['user_id' => $model->id])->one();
+        if (!$model_profile) {
+            $model_profile = new UserProfile;
+        }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if (Yii::$app->request->post('delete_avatar') !== null) {
+                if (!empty($model->avatar) && file_exists(Yii::getAlias('@webroot') . '/uploads/avatars/' . $model->avatar)) {
+                    unlink(Yii::getAlias('@webroot') . '/uploads/avatars/' . $model->avatar);
+                }
+                $model->avatar = null;
+                $model->avatar_file = null;
+            } else {
+                $model->avatar_file = UploadedFile::getInstance($model, 'avatar_file');
+                if ($model->avatar_file && $model->validate()) {
+                    if (!empty($model->avatar) && file_exists(Yii::getAlias('@webroot') . '/uploads/avatars/' . $model->avatar)) {
+                        unlink(Yii::getAlias('@webroot') . '/uploads/avatars/' . $model->avatar);
+                    }
+                    $f_name = md5($model->avatar_file->baseName . microtime());
+                    $model->avatar_file->saveAs('uploads/avatars/' . $f_name . '.' . $model->avatar_file->extension);
+                    $model->avatar = $f_name . '.' . $model->avatar_file->extension;
+                    $model->avatar_file = null;
+                    ImageHelper::imageResize(Yii::getAlias('@webroot') . '/uploads/avatars/' . $model->avatar, Yii::getAlias('@webroot') . '/uploads/avatars/' . $model->avatar, 120, 120);
+                }
+            }
+            if ($model->save()) {
+                if ($model_profile->load(Yii::$app->request->post())) {
+                    $model_profile->phone = preg_replace('/\D+/', '', $model_profile->phone);
+                    $model_profile->user_id = $model->id;
+                    if ($model_profile->save()) {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'role' => $model->role,
+            'model_profile' => $model_profile,
         ]);
     }
 
@@ -121,7 +155,7 @@ class UserController extends BaseController
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/']);
     }
 
     /**
@@ -138,5 +172,44 @@ class UserController extends BaseController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+    public function actionToggleActive($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->active == User::STATUS_ACTIVE) {
+            $model->active = User::STATUS_INACTIVE;
+        } else if ($model->active == User::STATUS_INACTIVE) {
+            $model->active = User::STATUS_ACTIVE;
+        }
+        
+        if ($model->save()) {
+            return $this->redirect(['/']);
+        }
+    }
+    
+    public function actionAccess($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = 'update';
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if (!empty(Yii::$app->request->post('new_password'))) {
+                if (Yii::$app->request->post('new_password') == Yii::$app->request->post('new_password_repeat')) {
+                    $model->password = Yii::$app->getSecurity()->generatePasswordHash(Yii::$app->request->post('new_password'));
+                } else {
+                    Yii::$app->session->setFlash('error', 'Пароли не совпадают');
+                }
+            }
+            if ($model->save()) {
+                return $this->redirect(['/']);
+            }
+        }
+        
+        $model->password = null;
+        
+        return $this->render('access', [
+            'model' => $model,
+        ]);
     }
 }

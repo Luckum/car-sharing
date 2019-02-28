@@ -2,19 +2,25 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\models\User;
 
-//$.pjax.reload({container:"#fund-deduction-pjax"});
-$this->title = Yii::$app->name;
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$title = 'Список бригад';
+$this->title = Yii::$app->name . ' | ' . $title;
 ?>
-<div class="site-index">
-    <div class="site-index-buttons">
+<div class="brigade-index">
+
+    <div class="brigade-index-buttons">
+        <?= Html::a('Все', 'javascript:void(0)', ['class' => 'btn btn-default']) ?>
+        <?= Html::a('На линии', 'javascript:void(0)', ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Простой', 'javascript:void(0)', ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Офлайн', 'javascript:void(0)', ['class' => 'btn btn-default']) ?>
+        
         <?= Html::a('Собрать бригаду', ['/brigade/create'], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Добавить рабочего', ['/user/create', 'role' => User::ROLE_WORKER], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Добавить менеджера', ['/user/create', 'role' => User::ROLE_MANAGER], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Список бригад', ['/brigade/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('На главную', ['/'], ['class' => 'btn btn-info']) ?>
     </div>
-    <div class="site-index-content">
+    <div class="brigade-index-content">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'tableOptions' => [
@@ -22,25 +28,24 @@ $this->title = Yii::$app->name;
             ],
             'columns' => [
                 [
-                    'class' => 'yii\grid\SerialColumn',
-                    'header' => '№ п/п',
+                    'attribute' => 'title',
                     'headerOptions' => ['width' => '5%'],
                     'contentOptions' => ['width' => '5%']
                 ],
                 [
-                    'attribute' => 'fullNameColumnHtmlFormatted',
+                    'attribute' => 'teamColumnHtmlFormatted',
                     'format' => 'raw',
                     'headerOptions' => ['width' => '15%'],
                     'contentOptions' => ['width' => '15%']
                 ],
                 [
-                    'attribute' => 'roleColumnHtmlFormatted',
+                    'attribute' => 'statusColumnHtmlFormatted',
                     'format' => 'raw',
                     'headerOptions' => ['width' => '9%'],
                     'contentOptions' => ['width' => '9%']
                 ],
                 [
-                    'attribute' => 'brigadeColumnHtmlFormatted',
+                    'attribute' => 'areaColumnHtmlFormatted',
                     'format' => 'raw',
                     'headerOptions' => ['width' => '13%'],
                     'contentOptions' => ['width' => '13%']
@@ -52,13 +57,10 @@ $this->title = Yii::$app->name;
                     'contentOptions' => ['width' => '20%']
                 ],
                 [
+                    'attribute' => 'currentTicketColumnHtmlFormatted',
                     'format' => 'raw',
-                    'header' => 'Фото',
                     'headerOptions' => ['width' => '20%'],
-                    'contentOptions' => ['width' => '20%'],
-                    'value' => function ($data) {
-                        return !empty($data->avatar) ? Html::img('/uploads/avatars/' . $data->avatar) : '';
-                    }
+                    'contentOptions' => ['width' => '20%']
                 ],
                 [
                     'attribute' => 'buttonsColumnHtmlFormatted',

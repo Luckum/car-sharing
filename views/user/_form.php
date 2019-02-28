@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\MaskedInput;
 use app\models\User;
 
 /* @var $this yii\web\View */
@@ -13,7 +14,7 @@ if ($role == User::ROLE_MANAGER) {
     $roles_list = [
         User::ROLE_MANAGER => $userModel->getRoleRuByRole(User::ROLE_MANAGER)
     ];
-} else if ($role == User::ROLE_WORKER) {
+} else if ($role == User::ROLE_WORKER || $role == User::ROLE_BRIGADIER) {
     $roles_list = [
         User::ROLE_WORKER => $userModel->getRoleRuByRole(User::ROLE_WORKER),
         User::ROLE_BRIGADIER => $userModel->getRoleRuByRole(User::ROLE_BRIGADIER)
@@ -27,9 +28,11 @@ if ($role == User::ROLE_MANAGER) {
 
     <?= $form->field($model, 'role')->dropDownList($roles_list, []) ?>
 
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+    <?php if ($model->isNewRecord): ?>
+        <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+    
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
@@ -49,10 +52,26 @@ if ($role == User::ROLE_MANAGER) {
         </div>
     <?php endif; ?>
 
+    <?php if (!$model->isNewRecord): ?>
+        <?= $form->field($model_profile, 'phone')->widget(MaskedInput::className(), [
+            'mask' => '+7 (999)-999-9999',
+        ]) ?>
+
+        <?= $form->field($model_profile, 'city')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model_profile, 'address_line')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model_profile, 'whatsapp_account')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model_profile, 'telegram_account')->textInput(['maxlength' => true]) ?>
+        
+        <?= $form->field($model_profile, 'comment')->textarea(['rows' => 6]) ?>
+    <?php endif; ?>
+    
     <?= $form->field($model, 'active')->checkbox() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

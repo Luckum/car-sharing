@@ -1,10 +1,28 @@
+<?php 
+
+use yii\helpers\Html;
+use app\models\User;
+
+?>
 <table>
     <tbody>
         <tr class="tr-bottom">
-            <td><a class="btn btn-default" href="javascript:void(0);">задать логин/пароль</a></td>
+            <td><?= Html::a('задать логин/пароль', ['/user/access', 'id' => $model->id], ['class' => 'btn btn-default']) ?></td>
         </tr>
         <tr>
-            <td><a class="btn btn-default" href="javascript:void(0);">отключить доступ к системе</a></td>
+            <td>
+                <?= Html::a(
+                    $model->active == User::STATUS_ACTIVE ? 'отключить доступ к системе' : 'включить доступ к системе',
+                    ['/user/toggle-active', 'id' => $model->id],
+                    [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => 'Вы уверены?',
+                            'method' => 'post',
+                        ]
+                    ]
+                )?>
+            </td>
         </tr>
     </tbody>
 </table>

@@ -1,10 +1,16 @@
+<?php
+
+use yii\helpers\Html;
+
+?>
+
 <table>
     <tbody>
         <tr class="tr-top">
             <td><?= $model->fullName ?></td>
         </tr>
         <tr>
-            <td><a class="btn btn-default" href="javascript:void(0)">посмотреть карточку</a></td>
+            <td><?= Html::a('посмотреть карточку', ['/user/view', 'id' => $model->id], ['class' => 'btn btn-default']) ?></td>
         </tr>
     </tbody>
 </table>

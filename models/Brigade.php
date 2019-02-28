@@ -21,6 +21,19 @@ use Yii;
  */
 class Brigade extends \yii\db\ActiveRecord
 {
+    const STATUS_ONLINE = 'online';
+    const STATUS_OFFLINE = 'offline';
+    const STATUS_PAUSE = 'pause';
+    
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 0;
+    
+    protected $statusRu = [
+        self::STATUS_ONLINE => 'На линии',
+        self::STATUS_OFFLINE => 'Офлайн',
+        self::STATUS_PAUSE => 'Простой',
+    ];
+    
     /**
      * @inheritdoc
      */
@@ -51,12 +64,17 @@ class Brigade extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'status' => 'Status',
-            'active' => 'Active',
-            'area_id' => 'Area ID',
-            'created_at' => 'Created At',
+            'id' => 'Номер',
+            'title' => 'Название',
+            'status' => 'Статус',
+            'active' => 'Активна',
+            'area_id' => 'Квадрант',
+            'created_at' => 'Дата создания',
+            'teamColumnHtmlFormatted' => 'Состав бригады',
+            'statusColumnHtmlFormatted' => 'Статус',
+            'areaColumnHtmlFormatted' => 'Квадрант',
+            'ticketsColumnHtmlFormatted' => 'Выполненных заявок за сутки / всего',
+            'currentTicketColumnHtmlFormatted' => 'Текущая заявка',
         ];
     }
 
@@ -106,5 +124,52 @@ class Brigade extends \yii\db\ActiveRecord
         return Ticket::find()
             ->where(['brigade_id' => $this->id, 'status' => Ticket::STATUS_COMPLETED])
             ->count();
+    }
+    
+    public function getTeamColumnHtmlFormatted()
+    {
+        return Yii::$app->view->renderFile('@app/views/brigade/snippets/team_col.php', [
+            'model' => $this,
+        ]);
+    }
+    
+    public function getStatusColumnHtmlFormatted()
+    {
+        return Yii::$app->view->renderFile('@app/views/brigade/snippets/status_col.php', [
+            'model' => $this,
+        ]);
+    }
+    
+    public function getStatusRu()
+    {
+        return $this->statusRu[$this->status];
+    }
+    
+    public function getAreaColumnHtmlFormatted()
+    {
+        return Yii::$app->view->renderFile('@app/views/brigade/snippets/area_col.php', [
+            'model' => $this,
+        ]);
+    }
+    
+    public function getTicketsColumnHtmlFormatted()
+    {
+        return Yii::$app->view->renderFile('@app/views/brigade/snippets/tickets_col.php', [
+            'model' => $this,
+        ]);
+    }
+    
+    public function getCurrentTicketColumnHtmlFormatted()
+    {
+        return Yii::$app->view->renderFile('@app/views/brigade/snippets/current_ticket_col.php', [
+            'model' => $this,
+        ]);
+    }
+    
+    public function getButtonsColumnHtmlFormatted()
+    {
+        return Yii::$app->view->renderFile('@app/views/brigade/snippets/buttons_col.php', [
+            'model' => $this,
+        ]);
     }
 }

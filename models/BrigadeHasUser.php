@@ -31,9 +31,8 @@ class BrigadeHasUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'brigade_id'], 'required'],
-            [['user_id', 'brigade_id'], 'integer'],
-            [['is_master'], 'string', 'max' => 1],
+            [['user_id', 'brigade_id', 'is_master'], 'required'],
+            [['user_id', 'brigade_id', 'is_master'], 'integer'],
             [['brigade_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brigade::className(), 'targetAttribute' => ['brigade_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -46,9 +45,9 @@ class BrigadeHasUser extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
+            'user_id' => 'Рабочие',
             'brigade_id' => 'Brigade ID',
-            'is_master' => 'Is Master',
+            'is_master' => 'Бригадир',
         ];
     }
 

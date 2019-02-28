@@ -57,12 +57,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['role'], 'string'],
-            [['username', 'password', 'email', 'firstname', 'lastname'], 'required'],
+            [['username', 'email', 'firstname', 'lastname'], 'required'],
+            [['password'], 'required', 'except' => 'update'],
             [['created_at'], 'safe'],
             [['username'], 'string', 'max' => 45],
             [['email', 'avatar'], 'string', 'max' => 50],
             [['firstname', 'midname', 'lastname'], 'string', 'max' => 100],
-            [['active'], 'string', 'max' => 1],
+            [['active'], 'integer'],
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password'], 'string', 'min' => 8, 'max' => 255],
@@ -193,5 +194,35 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return Yii::$app->view->renderFile('@app/views/user/snippets/buttons_col.php', [
             'model' => $this,
         ]);
+    }
+    
+    public function beforeDelete()
+    {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
+
+        if (!empty($this->avatar) && file_exists(Yii::getAlias('@webroot') . '/uploads/avatars/' . $this->avatar)) {
+            unlink(Yii::getAlias('@webroot') . '/uploads/avatars/' . $this->avatar);
+        }
+        return true;
+    }
+    
+    public static function getFreeWorkers()
+    {
+        return self::find()
+            ->joinWith('brigadeHasUser')
+            ->where(['role' => self::ROLE_WORKER])
+            ->andWhere('brigade_has_user.user_id IS NULL')
+            ->all();
+    }
+    
+    public static function getFreeMasters()
+    {
+        return self::find()
+            ->joinWith('brigadeHasUser')
+            ->where(['role' => self::ROLE_BRIGADIER])
+            ->andWhere('brigade_has_user.user_id IS NULL')
+            ->all();
     }
 }

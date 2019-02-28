@@ -4,13 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\UserProfile */
+/* @var $model app\models\Brigade */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'User Profiles', 'url' => ['index']];
+$this->title = $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Brigades', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+\yii\web\YiiAsset::register($this);
 ?>
-<div class="user-profile-view">
+<div class="brigade-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,13 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'user_id',
-            'phone',
-            'city',
-            'comment:ntext',
-            'address_line',
-            'whatsapp_account',
-            'telegram_account',
+            'title',
+            'status',
+            'active',
+            'area_id',
+            'created_at',
         ],
     ]) ?>
 

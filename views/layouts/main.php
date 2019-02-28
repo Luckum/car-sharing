@@ -6,7 +6,8 @@
 use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\assets\AppAsset;         
+use app\assets\AppAsset;
+use yii\bootstrap\ButtonDropdown;         
 
 AppAsset::register($this);
 
@@ -37,11 +38,24 @@ Yii::$app->formatter->locale = 'ru-RU';
             <?= Yii::$app->user->isGuest ?: Yii::$app->user->identity->roleRu ?>
         </div>
         <div class="system-datetime">
-            <div class="system-date"><?= Yii::$app->formatter->asDate('now', 'd MMMM y') ?></div>
-            <div class="system-time"><?= Yii::$app->formatter->asDate('now', 'E, HH:mm') ?></div>
+            <div class="system-date"></div>
+            <div class="system-time"></div>
         </div>
         <div class="system-buttons pull-right">
-            <?= Html::a('Настройки', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+            <?= ButtonDropdown::widget([
+                    'label' => 'Настройки',
+                    'options' => [
+                        'class' => 'btn btn-default',
+                    ],
+                    'dropdown' => [
+                        'items' => [
+                            [
+                                'label' => 'Квадранты',
+                                'url' => Url::to(['/settings/area'])
+                            ],
+                        ]
+                    ]
+            ]); ?>
             <?= Html::a('Фотографии', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?= Html::a('Заявки', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?= Html::a('Сформировать отчёт', 'javascript:void();', ['class' => 'btn btn-default']) ?>

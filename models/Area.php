@@ -42,8 +42,8 @@ class Area extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'zip' => 'Zip',
+            'title' => 'Название',
+            'zip' => 'Индекс',
         ];
     }
 
@@ -53,5 +53,10 @@ class Area extends \yii\db\ActiveRecord
     public function getBrigades()
     {
         return $this->hasMany(Brigade::className(), ['area_id' => 'id']);
+    }
+    
+    public function getTitleWithZip()
+    {
+        return $this->title . ' (' . $this->zip . ')';
     }
 }

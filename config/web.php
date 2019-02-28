@@ -51,9 +51,15 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '<action:\w+>' => 'site/<action>',
+                 
             ],
         ],
         
+    ],
+    'modules' => [
+        'settings' => [
+            'class' => 'app\modules\settings\Module',
+        ],
     ],
     'params' => $params,
 ];

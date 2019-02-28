@@ -175,16 +175,21 @@ form div.required label.control-label:after {
 	border: 1px solid #ddd;
 }
 .site-index .site-index-content table tr .tr-top,
-.site-index .site-index-content table tr .tr-bottom {
+.site-index .site-index-content table tr .tr-bottom,
+.brigade-index .brigade-index-content table tr .tr-top,
+.brigade-index .brigade-index-content table tr .tr-bottom {
 	height: 140px;
 }
-.site-index .site-index-content table tr .tr-top {
+.site-index .site-index-content table tr .tr-top,
+.brigade-index .brigade-index-content table tr .tr-top {
 	vertical-align: top;
 }
-.site-index .site-index-content table tr .tr-bottom {
+.site-index .site-index-content table tr .tr-bottom,
+.brigade-index .brigade-index-content table tr .tr-bottom {
 	vertical-align: bottom;
 }
-.site-index .site-index-content table tr .tr-bottom td {
+.site-index .site-index-content table tr .tr-bottom td,
+.brigade-index .brigade-index-content table tr .tr-bottom td {
 	padding-bottom: 25px;
 }
 table.table-fixed,
