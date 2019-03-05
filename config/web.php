@@ -1,5 +1,6 @@
 <?php
 
+$host = 'car-sharing.loc';
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -50,7 +51,10 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'http://<subdomain:\w+>.' . $host => 'sharing',
+                'http://<subdomain:\w+>.' . $host . '/<controller:\w+>' => 'sharing/<controller>',
                 '<action:\w+>' => 'site/<action>',
+                
                  
             ],
         ],
@@ -59,6 +63,9 @@ $config = [
     'modules' => [
         'settings' => [
             'class' => 'app\modules\settings\Module',
+        ],
+        'sharing' => [
+            'class' => 'app\modules\sharing\Module',
         ],
     ],
     'params' => $params,

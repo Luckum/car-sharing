@@ -32,12 +32,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     const ROLE_MANAGER = 'manager';
     const ROLE_WORKER = 'worker';
     const ROLE_BRIGADIER = 'brigadier';
+    const ROLE_OPERATOR = 'operator';
     
     protected $roleRu = [
         self::ROLE_ADMIN => 'Администратор',
         self::ROLE_MANAGER => 'Менеджер',
         self::ROLE_WORKER => 'Рабочий',
-        self::ROLE_BRIGADIER => 'Бригадир'
+        self::ROLE_BRIGADIER => 'Бригадир',
+        self::ROLE_OPERATOR => 'Представитель',
     ];
     
     public $avatar_file;
@@ -62,6 +64,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['created_at'], 'safe'],
             [['username'], 'string', 'max' => 45],
             [['email', 'avatar'], 'string', 'max' => 50],
+            ['email', 'email'],
             [['firstname', 'midname', 'lastname'], 'string', 'max' => 100],
             [['active'], 'integer'],
             [['username'], 'unique'],
