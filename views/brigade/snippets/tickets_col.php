@@ -18,7 +18,8 @@ use app\models\Area;
                 <?= Html::dropDownList(
                     'area',
                     $model->area_id,
-                    ArrayHelper::map(Area::find()->all(), 'id', 'title')
+                    ArrayHelper::map(Area::find()->all(), 'id', 'title'),
+                    ['onchange' => 'setArea(this)', 'data-brigade' => $model->id, 'class' => 'form-control']
                 )?>
             </td>
         </tr>

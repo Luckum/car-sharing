@@ -5,17 +5,18 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Brigade */
 
-$this->title = 'Update Brigade: ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Brigades', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$title = 'Редактирование бригады: ' . $model->title;
+$this->title = Yii::$app->name . ' | ' . $title;
 ?>
 <div class="brigade-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($title) ?></h1>
+    
+    <p><?= Html::a('Назад', Yii::$app->request->referrer, ['class' => 'btn btn-info']) ?></p>
 
     <?= $this->render('_form', [
         'model' => $model,
+        'model_brigade_has_user' => $model_brigade_has_user,
     ]) ?>
 
 </div>

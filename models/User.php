@@ -212,7 +212,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return self::find()
             ->joinWith('brigadeHasUser')
-            ->where(['role' => self::ROLE_WORKER])
+            ->where(['role' => self::ROLE_WORKER, 'active' => self::STATUS_ACTIVE])
             ->andWhere('brigade_has_user.user_id IS NULL')
             ->all();
     }
@@ -221,7 +221,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return self::find()
             ->joinWith('brigadeHasUser')
-            ->where(['role' => self::ROLE_BRIGADIER])
+            ->where(['role' => self::ROLE_BRIGADIER, 'active' => self::STATUS_ACTIVE])
             ->andWhere('brigade_has_user.user_id IS NULL')
             ->all();
     }

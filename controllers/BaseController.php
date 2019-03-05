@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\helpers\Url;
+use app\widgets\Alert;
 
 class BaseController extends Controller
 {
@@ -18,5 +19,13 @@ class BaseController extends Controller
             return $this->redirect(Yii::$app->user->loginUrl)->send();
         }
         return true;
+    }
+    
+    public function afterAction($action, $result)
+    {
+        if (Yii::$app->request->isAjax && !empty(Yii::$app->session->getAllFlashes())) {
+            echo Alert::widget();
+        }
+        return parent::afterAction($action, $result);
     }
 }

@@ -7,6 +7,7 @@ use softark\duallistbox\DualListbox;
 
 use app\models\Area;
 use app\models\User;
+use app\models\BrigadeHasUser;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Brigade */
@@ -15,6 +16,20 @@ use app\models\User;
 $areas = ArrayHelper::map(Area::find()->all(), 'id', 'titleWithZip');
 $masters = ArrayHelper::map(User::getFreeMasters(), 'id', 'fullName');
 $workers = ArrayHelper::map(User::getFreeWorkers(), 'id', 'fullName');
+
+$selected = null;
+$workers_selected = [];
+if (!$model->isNewRecord) {
+    foreach ($model->brigadeHasUsers as $user) {
+        if ($user->is_master) {
+            $masters = ArrayHelper::merge([$user->user_id => $user->user->fullName], $masters);
+            $selected = $user->user_id;
+        } else {
+            $workers = ArrayHelper::merge($workers, [$user->user_id => $user->user->fullName]);
+            $workers_selected = ArrayHelper::merge($workers_selected, [$user->user_id => ['selected' => true]]);
+        }
+    }
+}
 
 ?>
 
@@ -26,13 +41,14 @@ $workers = ArrayHelper::map(User::getFreeWorkers(), 'id', 'fullName');
 
     <?= $form->field($model, 'area_id')->dropDownList($areas) ?>
     
-    <?= $form->field($model_brigade_has_user, 'is_master')->dropDownList($masters) ?>
+    <?= $form->field($model_brigade_has_user, 'is_master')->dropDownList($masters, ['options' => [$selected => ['selected' => true]]]) ?>
     
     <?= $form->field($model_brigade_has_user, 'user_id')->widget(DualListbox::className(), [
         'items' => $workers,
         'options' => [
             'multiple' => true,
             'size' => 20,
+            'options' => $workers_selected,
         ],
         'clientOptions' => [
             'moveOnSelect' => true,

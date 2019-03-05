@@ -28,3 +28,29 @@ function clock()
     $(".system-time").html(day + ", " + hours + ":" + mins);
     t = setTimeout('clock()', 1000);
 }
+
+function setBrigade(obj)
+{
+    $.ajax({
+        url: "/brigade/set-brigade",
+        type: "POST",
+        data: {brigade: $(obj).val(), user: $(obj).attr('data-user')},
+        success: function(data) {
+            $.pjax.reload({container:"#site-index-pjax"});
+            $('#system-messages').html(data).stop().fadeIn().animate({opacity: 1.0}, 4000).fadeOut('slow');
+        }
+    });
+}
+
+function setArea(obj)
+{
+    $.ajax({
+        url: "/brigade/set-area",
+        type: "POST",
+        data: {area: $(obj).val(), brigade: $(obj).attr('data-brigade')},
+        success: function(data) {
+            $.pjax.reload({container:"#brigade-index-pjax"});
+            $('#system-messages').html(data).stop().fadeIn().animate({opacity: 1.0}, 4000).fadeOut('slow');
+        }
+    });
+}

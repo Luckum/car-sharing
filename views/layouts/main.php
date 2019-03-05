@@ -12,6 +12,10 @@ use yii\bootstrap\ButtonDropdown;
 AppAsset::register($this);
 
 Yii::$app->formatter->locale = 'ru-RU';
+
+if (Yii::$app->getSession()->getAllFlashes()) {
+    $this->registerJs("$('#system-messages').fadeIn().animate({opacity: 1.0}, 4000). fadeOut('slow');");
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -53,6 +57,10 @@ Yii::$app->formatter->locale = 'ru-RU';
                                 'label' => 'Квадранты',
                                 'url' => Url::to(['/settings/area'])
                             ],
+                            [
+                                'label' => 'Компании каршеринга',
+                                'url' => Url::to(['/settings/customer'])
+                            ],
                         ]
                     ]
             ]); ?>
@@ -60,11 +68,15 @@ Yii::$app->formatter->locale = 'ru-RU';
             <?= Html::a('Заявки', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?= Html::a('Сформировать отчёт', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?= Html::a('Выйти из системы', ['/logout'], ['data-method' => 'post', 'class' => 'btn btn-default']) ?>
+            
+            <div id="system-messages" style="opacity: 1; display: none">
+            <?= Alert::widget() ?>
+        </div>
         </div>
     </div>
 
     <div class="container">
-        <?= Alert::widget() ?>
+        
         <?= $content ?>
     </div>
 </div>

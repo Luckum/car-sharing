@@ -168,10 +168,12 @@ form div.required label.control-label:after {
   content: " * ";
   color: red;
 }
-.site-index .site-index-content {
+.site-index .site-index-content,
+.brigade-index .brigade-index-content {
 	margin-top: 25px;
 }
-.site-index .site-index-content table.table {
+.site-index .site-index-content table.table,
+.brigade-index .brigade-index-content table.table {
 	border: 1px solid #ddd;
 }
 .site-index .site-index-content table tr .tr-top,
@@ -215,4 +217,19 @@ table.table-fixed>tbody {
 table.table-fixed>thead>tr>th,
 table.table-fixed>tbody>tr>td {
   float: left;
+}
+
+table.table > tbody > tr.tr-online {
+	background-color: #b6d7a8;
+}
+table.table > tbody > tr.tr-pause {
+	background-color: #ffe598;
+}
+table.table > tbody > tr.tr-default {
+	background-color: #fff;
+}
+.sort-dropdown {
+	display: inline-block;
+	width: 67%;
+	margin-left: 15px;
 }

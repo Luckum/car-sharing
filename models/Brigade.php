@@ -50,10 +50,9 @@ class Brigade extends \yii\db\ActiveRecord
         return [
             [['title', 'status', 'active', 'area_id'], 'required'],
             [['status'], 'string'],
-            [['area_id'], 'integer'],
+            [['area_id', 'active'], 'integer'],
             [['created_at'], 'safe'],
             [['title'], 'string', 'max' => 100],
-            [['active'], 'string', 'max' => 1],
             [['area_id'], 'exist', 'skipOnError' => true, 'targetClass' => Area::className(), 'targetAttribute' => ['area_id' => 'id']],
         ];
     }
@@ -64,7 +63,7 @@ class Brigade extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'Номер',
+            'id' => 'ID',
             'title' => 'Название',
             'status' => 'Статус',
             'active' => 'Активна',

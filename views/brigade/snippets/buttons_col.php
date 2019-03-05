@@ -1,6 +1,7 @@
 <?php 
 
 use yii\helpers\Html;
+use app\models\Brigade;
 
 ?>
 <table>
@@ -9,7 +10,21 @@ use yii\helpers\Html;
             <td></td>
         </tr>
         <tr>
-            <td><?= Html::a('снять с линии', ['/brigade/', 'id' => $model->id], ['class' => 'btn btn-default']) ?></td>
+            <td>
+            <?php if ($model->status == Brigade::STATUS_ONLINE || $model->status == Brigade::STATUS_PAUSE): ?>
+                <?= Html::a(
+                    'снять с линии',
+                    ['/brigade/set-offline', 'id' => $model->id],
+                    [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => 'Вы уверены?',
+                            'method' => 'post',
+                        ]
+                    ]
+                ) ?>
+            <?php endif; ?>
+            </td>
         </tr>
     </tbody>
 </table>
