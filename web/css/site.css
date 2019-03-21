@@ -169,29 +169,36 @@ form div.required label.control-label:after {
   color: red;
 }
 .site-index .site-index-content,
-.brigade-index .brigade-index-content {
+.brigade-index .brigade-index-content,
+.ticket-index .ticket-index-content {
 	margin-top: 25px;
 }
 .site-index .site-index-content table.table,
-.brigade-index .brigade-index-content table.table {
+.brigade-index .brigade-index-content table.table,
+.ticket-index .ticket-index-content table.table {
 	border: 1px solid #ddd;
 }
 .site-index .site-index-content table tr .tr-top,
 .site-index .site-index-content table tr .tr-bottom,
 .brigade-index .brigade-index-content table tr .tr-top,
-.brigade-index .brigade-index-content table tr .tr-bottom {
+.brigade-index .brigade-index-content table tr .tr-bottom,
+.ticket-index .ticket-index-content table tr .tr-top,
+.ticket-index .ticket-index-content table tr .tr-bottom {
 	height: 140px;
 }
 .site-index .site-index-content table tr .tr-top,
-.brigade-index .brigade-index-content table tr .tr-top {
+.brigade-index .brigade-index-content table tr .tr-top,
+.ticket-index .ticket-index-content table tr .tr-top {
 	vertical-align: top;
 }
 .site-index .site-index-content table tr .tr-bottom,
-.brigade-index .brigade-index-content table tr .tr-bottom {
+.brigade-index .brigade-index-content table tr .tr-bottom,
+.ticket-index .ticket-index-content table tr .tr-bottom {
 	vertical-align: bottom;
 }
 .site-index .site-index-content table tr .tr-bottom td,
-.brigade-index .brigade-index-content table tr .tr-bottom td {
+.brigade-index .brigade-index-content table tr .tr-bottom td,
+.ticket-index .ticket-index-content table tr .tr-bottom td {
 	padding-bottom: 25px;
 }
 table.table-fixed,
@@ -227,6 +234,12 @@ table.table > tbody > tr.tr-pause {
 }
 table.table > tbody > tr.tr-default {
 	background-color: #fff;
+}
+table.table > tbody > tr.tr-asap {
+	background-color: #e99797;
+}
+table.table > tbody > tr.tr-completed {
+	background-color: #ededed;
 }
 .sort-dropdown {
 	display: inline-block;

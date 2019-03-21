@@ -16,6 +16,8 @@ use Yii;
  * @property string $address_line
  * @property string $logo
  * @property string $created_at
+ * 
+ * @property CustomerHasUser[] $customerHasUsers
  */
 class Customer extends \yii\db\ActiveRecord
 {
@@ -65,5 +67,25 @@ class Customer extends \yii\db\ActiveRecord
             'logo_file' => 'Логотип',
             'subdomain' => 'Поддомен',
         ];
+    }
+    
+     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomerHasUsers()
+    {
+        return $this->hasMany(CustomerHasUser::className(), ['customer_id' => 'id']);
+    }
+    
+    public function beforeDelete()
+    {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
+
+        if (!empty($this->logo) && file_exists(Yii::getAlias('@webroot') . '/uploads/logos/' . $this->logo)) {
+            unlink(Yii::getAlias('@webroot') . '/uploads/logos/' . $this->logo);
+        }
+        return true;
     }
 }

@@ -7,7 +7,9 @@ use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\assets\AppAsset;
-use yii\bootstrap\ButtonDropdown;         
+use yii\bootstrap\ButtonDropdown;
+
+use app\models\User;         
 
 AppAsset::register($this);
 
@@ -38,34 +40,46 @@ if (Yii::$app->getSession()->getAllFlashes()) {
                 <?= Html::img('/uploads/avatars/' . Yii::$app->user->identity->avatar) ?>
             </div>
         <?php endif; ?>
+        <?php if (!empty(Yii::$app->user->identity->customerHasUser->customer->logo)): ?>
+            <div class="user-avatar pull-left">
+                <?= Html::img('/uploads/logos/' . Yii::$app->user->identity->customerHasUser->customer->logo) ?>
+            </div>
+        <?php endif; ?>
+        
         <div class="user-title pull-left">
-            <?= Yii::$app->user->isGuest ?: Yii::$app->user->identity->roleRu ?>
+            <?= Yii::$app->user->identity->headerTitle ?>
         </div>
         <div class="system-datetime">
             <div class="system-date"></div>
             <div class="system-time"></div>
         </div>
         <div class="system-buttons pull-right">
-            <?= ButtonDropdown::widget([
-                    'label' => 'Настройки',
-                    'options' => [
-                        'class' => 'btn btn-default',
-                    ],
-                    'dropdown' => [
-                        'items' => [
-                            [
-                                'label' => 'Квадранты',
-                                'url' => Url::to(['/settings/area'])
-                            ],
-                            [
-                                'label' => 'Компании каршеринга',
-                                'url' => Url::to(['/settings/customer'])
-                            ],
+            <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN): ?>
+                <?= ButtonDropdown::widget([
+                        'label' => 'Настройки',
+                        'options' => [
+                            'class' => 'btn btn-default',
+                        ],
+                        'dropdown' => [
+                            'items' => [
+                                [
+                                    'label' => 'Квадранты',
+                                    'url' => Url::to(['/settings/area'])
+                                ],
+                                [
+                                    'label' => 'Компании каршеринга',
+                                    'url' => Url::to(['/settings/customer'])
+                                ],
+                                [
+                                    'label' => 'Виды работ',
+                                    'url' => Url::to(['/settings/job-type'])
+                                ],
+                            ]
                         ]
-                    ]
-            ]); ?>
-            <?= Html::a('Фотографии', 'javascript:void();', ['class' => 'btn btn-default']) ?>
-            <?= Html::a('Заявки', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+                ]); ?>
+                <?= Html::a('Фотографии', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+            <?php endif; ?>
+            <?= Html::a('Заявки', ['/ticket/index'], ['class' => 'btn btn-default']) ?>
             <?= Html::a('Сформировать отчёт', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?= Html::a('Выйти из системы', ['/logout'], ['data-method' => 'post', 'class' => 'btn btn-default']) ?>
             

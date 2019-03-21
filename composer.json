@@ -19,7 +19,9 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "yidas/yii2-fontawesome": "^4.0",
-        "softark/yii2-dual-listbox": "dev-master"
+        "softark/yii2-dual-listbox": "dev-master",
+        "kartik-v/yii2-widget-select2": "dev-master",
+        "mirocow/yii2-yandex-maps" : "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

@@ -40,7 +40,7 @@ class JobType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'value' => 'Value',
+            'value' => 'Название',
         ];
     }
 

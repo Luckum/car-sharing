@@ -12,13 +12,13 @@ use Yii;
  * @property string $created_at
  * @property string $started_at
  * @property string $finished_at
- * @property int $external_id
  * @property int $status
  * @property int $rent_type
  * @property string $comment
  * @property int $brigade_id
  * @property string $lat
  * @property string $lon
+ * @property int $car_id
  *
  * @property Brigade $brigade
  * @property TicketHasJobType[] $ticketHasJobTypes
@@ -30,8 +30,26 @@ class Ticket extends \yii\db\ActiveRecord
     const STATUS_ASAP = 2;
     const STATUS_COMPLETED = 3;
     
+    const RENT_TYPE_DAY = 1;
+    const RENT_TYPE_HOUR = 2;
+    
+    const TICKET_TYPE_AUTO = 'auto';
+    const TICKET_TYPE_HANDLE = 'handle';
+    
+    protected $statusRu = [
+        self::STATUS_REJECTED => 'отклоненная',
+        self::STATUS_COMMON => 'обычная',
+        self::STATUS_ASAP => 'срочная',
+        self::STATUS_COMPLETED => 'выполненная',
+    ];
+    
+    protected $rentTypeRu = [
+        self::RENT_TYPE_DAY => 'суточная',
+        self::RENT_TYPE_HOUR => 'часовая',
+    ];
+    
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -39,39 +57,40 @@ class Ticket extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['type', 'external_id', 'status', 'rent_type', 'lat', 'lon'], 'required'],
+            [['type', 'status', 'rent_type', 'lat', 'lon', 'car_id'], 'required'],
             [['type', 'comment'], 'string'],
             [['created_at', 'started_at', 'finished_at'], 'safe'],
-            [['external_id', 'brigade_id'], 'integer'],
+            [['status', 'rent_type', 'brigade_id', 'car_id'], 'integer'],
             [['lat', 'lon'], 'number'],
-            [['status', 'rent_type'], 'string', 'max' => 1],
             [['brigade_id'], 'exist', 'skipOnError' => true, 'targetClass' => Brigade::className(), 'targetAttribute' => ['brigade_id' => 'id']],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
             'type' => 'Type',
-            'created_at' => 'Created At',
+            'created_at' => 'Время поступления заявки',
             'started_at' => 'Started At',
             'finished_at' => 'Finished At',
-            'external_id' => 'External ID',
-            'status' => 'Status',
-            'rent_type' => 'Rent Type',
+            'status' => 'Статус заявки',
+            'rent_type' => 'Тип аренды',
             'comment' => 'Comment',
             'brigade_id' => 'Brigade ID',
             'lat' => 'Lat',
             'lon' => 'Lon',
+            'car_id' => 'Автомобиль',
+            'placeColumnHtmlFormatted' => 'Расположение',
+            'jobsColumnHtmlFormatted' => 'Необходимые работы',
         ];
     }
 
@@ -89,5 +108,42 @@ class Ticket extends \yii\db\ActiveRecord
     public function getTicketHasJobTypes()
     {
         return $this->hasMany(TicketHasJobType::className(), ['ticket_id' => 'id']);
+    }
+    
+    public function getCreateStatuses()
+    {
+        return [
+            self::STATUS_COMMON => $this->statusRu[self::STATUS_COMMON],
+            self::STATUS_ASAP => $this->statusRu[self::STATUS_ASAP],
+        ];
+    }
+    
+    public function getRentTypeRu()
+    {
+        return $this->rentTypeRu;
+    }
+    
+    public function getStatusRu()
+    {
+        return $this->statusRu[$this->status];
+    }
+    
+    public function getPlaceColumnHtmlFormatted()
+    {
+        return Yii::$app->view->renderFile('@app/views/ticket/snippets/place_col.php', [
+            'model' => $this,
+        ]);
+    }
+    
+    public function getRentType()
+    {
+        return $this->rentTypeRu[$this->rent_type];
+    }
+    
+    public function getJobsColumnHtmlFormatted()
+    {
+        return Yii::$app->view->renderFile('@app/views/ticket/snippets/jobs_col.php', [
+            'model' => $this,
+        ]);
     }
 }

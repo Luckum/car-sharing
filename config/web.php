@@ -47,12 +47,18 @@ $config = [
         ],
         'db' => $db,
         
+        'yandexMapsApi' => [
+            'class' => 'mirocow\yandexmaps\Api',
+        ],
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'http://<subdomain:\w+>.' . $host => 'sharing',
-                'http://<subdomain:\w+>.' . $host . '/<controller:\w+>' => 'sharing/<controller>',
+                'http://<subdomain:\w+>.' . $host => 'customer',
+                'http://<subdomain:\w+>.' . $host . '/<action:\w+>' => 'customer/default/<action>',
+                'http://<subdomain:\w+>.' . $host . '/<controller:\w+>' => 'customer/<controller>',
+                'http://<subdomain:\w+>.' . $host . '/<controller:\w+>/<action:\w+>' => 'customer/<controller>/<action>',
                 '<action:\w+>' => 'site/<action>',
                 
                  
@@ -64,8 +70,11 @@ $config = [
         'settings' => [
             'class' => 'app\modules\settings\Module',
         ],
-        'sharing' => [
-            'class' => 'app\modules\sharing\Module',
+        'customer' => [
+            'class' => 'app\modules\customer\Module',
+        ],
+        'api' => [
+            'class' => 'app\modules\api\Module',
         ],
     ],
     'params' => $params,

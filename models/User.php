@@ -114,6 +114,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
     }
     
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomerHasUser()
+    {
+        return $this->hasOne(CustomerHasUser::className(), ['user_id' => 'id']);
+    }
+    
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'active' => self::STATUS_ACTIVE]);
@@ -227,5 +235,29 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ->where(['role' => self::ROLE_BRIGADIER, 'active' => self::STATUS_ACTIVE])
             ->andWhere('brigade_has_user.user_id IS NULL')
             ->all();
+    }
+    
+    public static function findOperatorByUsername($username, $customer_id)
+    {
+        return self::find()
+            ->joinWith('customerHasUser')
+            ->where(['username' => $username, 'active' => self::STATUS_ACTIVE, 'customer_id' => $customer_id])
+            ->one();
+    }
+    
+    public function getHeaderTitle()
+    {
+        $ret = '';
+        switch ($this->role) {
+            case self::ROLE_ADMIN:
+                $ret = $this->getRoleRu();
+            break;
+            case self::ROLE_OPERATOR:
+                $ret = '<div>Каршеринг "' . $this->customerHasUser->customer->title . '"</div>';
+                $ret .= '<div>Представитель: ' . $this->fullName . '</div>';
+            break;
+        }
+        
+        return $ret;
     }
 }

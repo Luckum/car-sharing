@@ -45,7 +45,7 @@ class TicketHasJobType extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'ticket_id' => 'Ticket ID',
-            'job_type_id' => 'Job Type ID',
+            'job_type_id' => 'Вид работ',
         ];
     }
 

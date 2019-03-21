@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Area */
+/* @var $model app\models\JobType */
 
-$title = 'Настройки: квадрант - ' . $model->title;
+$title = 'Настройки: вид работ - ' . $model->value;
 $this->title = Yii::$app->name . ' | ' . $title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="area-view">
+<div class="job-type-view">
 
     <h1><?= Html::encode($title) ?></h1>
 
     <p>
-        <?= Html::a('Назад', ['/settings/area'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('Назад', ['/settings/job-type'], ['class' => 'btn btn-info']) ?>
         <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -30,8 +30,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
         'model' => $model,
         'attributes' => [
             'id',
-            'title',
-            'zip',
+            'value',
         ],
     ]) ?>
 

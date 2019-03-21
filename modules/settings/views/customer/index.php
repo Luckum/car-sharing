@@ -49,7 +49,15 @@ $this->title = Yii::$app->name . ' | ' . $title;
             //'logo',
             //'created_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{operator} {view} {update} {delete}',
+                'buttons' => [
+                    'operator' => function ($url, $model, $key) {
+                        return Html::a('<i class="fa fa-users"></i>', $url, ['title' => 'Операторы']);
+                    }
+                ],
+            ],
         ],
     ]); ?>
 </div>

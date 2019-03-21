@@ -9,15 +9,14 @@ use app\models\User;
 /* @var $model app\models\User */
 /* @var $form yii\widgets\ActiveForm */
 
-$userModel = new User;
 if ($role == User::ROLE_MANAGER) {
     $roles_list = [
-        User::ROLE_MANAGER => $userModel->getRoleRuByRole(User::ROLE_MANAGER)
+        User::ROLE_MANAGER => User::instance()->getRoleRuByRole(User::ROLE_MANAGER)
     ];
 } else if ($role == User::ROLE_WORKER || $role == User::ROLE_BRIGADIER) {
     $roles_list = [
-        User::ROLE_WORKER => $userModel->getRoleRuByRole(User::ROLE_WORKER),
-        User::ROLE_BRIGADIER => $userModel->getRoleRuByRole(User::ROLE_BRIGADIER)
+        User::ROLE_WORKER => User::instance()->getRoleRuByRole(User::ROLE_WORKER),
+        User::ROLE_BRIGADIER => User::instance()->getRoleRuByRole(User::ROLE_BRIGADIER)
     ];
 }
 ?>

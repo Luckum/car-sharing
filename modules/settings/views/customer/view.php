@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Customer */
 
-$title = 'Настройки: rомпания каршеринга: ' . $model->title;
+$title = 'Настройки: компания каршеринга: ' . $model->title;
 $this->title = Yii::$app->name . ' | ' . $title;
 \yii\web\YiiAsset::register($this);
 ?>

@@ -4,6 +4,8 @@ namespace app\modules\settings\controllers;
 
 use Yii;
 use app\models\Customer;
+use app\models\User;
+use app\models\CustomerHasUser;
 use yii\data\ActiveDataProvider;
 use app\controllers\BaseController;
 use app\helpers\ImageHelper;
@@ -70,6 +72,7 @@ class CustomerController extends BaseController
         $model = new Customer();
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->subdomain = strtolower($model->subdomain);
             $model->logo_file = UploadedFile::getInstance($model, 'logo_file');
             $model->phone = preg_replace('/\D+/', '', $model->phone);
             if ($model->logo_file && $model->validate()) {
@@ -122,6 +125,7 @@ class CustomerController extends BaseController
             }
             
             $model->phone = preg_replace('/\D+/', '', $model->phone);
+            $model->subdomain = strtolower($model->subdomain);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -160,5 +164,78 @@ class CustomerController extends BaseController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    
+    public function actionOperator($id)
+    {
+        $model = $this->findModel($id);
+        
+        $dataProvider = new ActiveDataProvider([
+            'query' => User::find()->where(['role' => User::ROLE_OPERATOR]),
+            'sort' => false
+        ]);
+        
+        return $this->render('operator', [
+            'model' => $model,
+            'dataProvider' => $dataProvider
+        ]);
+    }
+    
+    public function actionOperatorCreate($id)
+    {
+        $model = $this->findModel($id);
+        $model_user = new User;
+        
+        if ($model_user->load(Yii::$app->request->post())) {
+            $model_user->password = Yii::$app->getSecurity()->generatePasswordHash($model_user->password);
+            $model_user->role = User::ROLE_OPERATOR;
+            if ($model_user->save()) {
+                $model_customer_has_user = new CustomerHasUser;
+                $model_customer_has_user->user_id = $model_user->id;
+                $model_customer_has_user->customer_id = $model->id;
+                if ($model_customer_has_user->save()) {
+                    return $this->redirect(['operator-view', 'id' => $model->id, 'oid' => $model_user->id]);
+                }
+            }
+        }
+        
+        return $this->render('operator-create', [
+            'model' => $model,
+            'model_user' => $model_user,
+        ]);
+    }
+    
+    public function actionOperatorView($id, $oid)
+    {
+        $model = $this->findModel($id);
+        $model_user = User::findOne($oid);
+        
+        return $this->render('operator-view', [
+            'model' => $model,
+            'model_user' => $model_user,
+        ]);
+    }
+    
+    public function actionOperatorUpdate($id, $oid)
+    {
+        $model = $this->findModel($id);
+        $model_user = User::findOne($oid);
+        
+        if ($model_user->load(Yii::$app->request->post()) && $model_user->save()) {
+            return $this->redirect(['operator-view', 'id' => $model->id, 'oid' => $model_user->id]);
+        }
+        
+        return $this->render('operator-update', [
+            'model' => $model,
+            'model_user' => $model_user,
+        ]);
+    }
+    
+    public function actionOperatorDelete($id, $oid)
+    {
+        $model_user = User::findOne($oid);
+        $model_user->delete();
+        
+        return $this->redirect(['operator', 'id' => $id]);
     }
 }
