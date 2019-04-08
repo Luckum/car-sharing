@@ -31,6 +31,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
         'attributes' => [
             'id',
             'value',
+            'job_time'
         ],
     ]) ?>
 

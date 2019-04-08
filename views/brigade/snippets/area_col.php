@@ -1,10 +1,15 @@
 <table>
     <tbody>
         <tr class="tr-top">
-            <td><?= $model->area->titleWithZip ?></td>
+            <td>
+                <?php foreach ($model->brigadeHasAreas as $area): ?>
+                    <?= $area->area->titleWithZip ?>
+                    <br />
+                <?php endforeach; ?>
+            </td>
         </tr>
         <tr>
-            <td><span>Изменить привязку:</span></td>
+            <td></td>
         </tr>
     </tbody>
 </table>

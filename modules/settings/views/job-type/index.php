@@ -24,6 +24,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'value',
+            'job_time',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

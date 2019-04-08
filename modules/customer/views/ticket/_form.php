@@ -12,6 +12,12 @@ use app\models\JobType;
 /* @var $form yii\widgets\ActiveForm */
 
 $jobs = ArrayHelper::map(JobType::find()->all(), 'id', 'value');
+$jobs_selected = [];
+if (!$model->isNewRecord) {
+    foreach ($model->ticketHasJobTypes as $job) {
+        $jobs_selected = ArrayHelper::merge($jobs_selected, [$job->job_type_id => ['selected' => true]]);
+    }
+}
 ?>
 
 <div class="ticket-form">
@@ -24,6 +30,7 @@ $jobs = ArrayHelper::map(JobType::find()->all(), 'id', 'value');
         'pluginOptions' => [
             'allowClear' => true
         ],
+        'disabled' => !$model->isNewRecord
     ]) ?>
     
     <?= $form->field($model, 'status')->dropDownList($model->createStatuses) ?>
@@ -35,6 +42,7 @@ $jobs = ArrayHelper::map(JobType::find()->all(), 'id', 'value');
         'options' => [
             'multiple' => true,
             'size' => 20,
+            'options' => $jobs_selected,
         ],
         'clientOptions' => [
             'moveOnSelect' => true,

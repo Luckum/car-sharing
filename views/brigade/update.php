@@ -17,6 +17,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
     <?= $this->render('_form', [
         'model' => $model,
         'model_brigade_has_user' => $model_brigade_has_user,
+        'model_brigade_has_area' => $model_brigade_has_area,
     ]) ?>
 
 </div>

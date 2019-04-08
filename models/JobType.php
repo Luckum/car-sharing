@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $value
+ * @property int $job_time
  *
  * @property TicketHasJobType[] $ticketHasJobTypes
  */
@@ -28,7 +29,8 @@ class JobType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['value'], 'required'],
+            [['value', 'job_time'], 'required'],
+            [['job_time'], 'number'],
             [['value'], 'string', 'max' => 255],
         ];
     }
@@ -41,6 +43,7 @@ class JobType extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'value' => 'Название',
+            'job_time' => 'Время на выполнение работ, часы',
         ];
     }
 
@@ -51,4 +54,5 @@ class JobType extends \yii\db\ActiveRecord
     {
         return $this->hasMany(TicketHasJobType::className(), ['job_type_id' => 'id']);
     }
+    
 }

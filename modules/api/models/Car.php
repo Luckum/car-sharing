@@ -6,24 +6,27 @@ use yii\base\Model;
 
 class Car extends Model
 {
-    protected $source = 'http://car5.ru/car5/api/cars?session_id=1a17ffe1-9146-4f75-9b09-23d7f93a52aa';
+    protected $session = 'session_id=1a17ffe1-9146-4f75-9b09-23d7f93a52aa';
+    protected $source = 'http://car5.ru/car5/api/cars';
     protected $cars;
+    protected $car;
+    protected $car_id = '';
     
-    public function __construct()
+    public function getData()
     {
-        $this->getData();
-    }
-    
-    protected function getData()
-    {
+        $url = empty($this->car_id) ? $this->source . '?' . $this->session : $this->source . '/' . $this->car_id . '/?' . $this->session;
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $this->source);
+        curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         
         $result = curl_exec($curl);
         curl_close($curl);
         
-        $this->cars = json_decode($result);
+        if (empty($this->car_id)) {
+            $this->cars = json_decode($result);
+        } else {
+            $this->car = json_decode($result);
+        }
     }
     
     public function getModelWithNumber()
@@ -36,23 +39,33 @@ class Car extends Model
         return $ret;
     }
     
-    public static function getLatById($car_id)
+    public function getLat()
     {
-        return '55.7181206';
+        return $this->car->cars[0]->lat;
     }
     
-    public static function getLonById($car_id)
+    public function getLon()
     {
-        return '37.3970528';
+        return $this->car->cars[0]->lon;
     }
     
-    public static function getModelById($car_id)
+    public function getModel()
     {
-        return 'Nissan X-Trail';
+        return $this->car->cars[0]->model;
     }
     
-    public static function getNumberById($car_id)
+    public function getNumber()
     {
-        return 'М 496 АР 799';
+        return $this->car->cars[0]->gnum;
+    }
+    
+    public function setCarId($id)
+    {
+        $this->car_id = $id;
+    }
+    
+    public function getVin()
+    {
+        return $this->car->cars[0]->vin;
     }
 }

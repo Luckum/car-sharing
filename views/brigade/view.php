@@ -47,8 +47,15 @@ $this->title = Yii::$app->name . ' | ' . $title;
                 'format' => 'raw'
             ],
             [
-                'attribute' => 'area_id',
-                'value' => $model->area->titleWithZip,
+                'label' => 'Квадрант',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $ret = '';
+                    foreach ($data->brigadeHasAreas as $row) {
+                        $ret .= $row->area->titleWithZip . '<br />';
+                    }
+                    return $ret;
+                }
             ],
             'created_at:date',
             [

@@ -69,12 +69,20 @@ class Customer extends \yii\db\ActiveRecord
         ];
     }
     
-     /**
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getCustomerHasUsers()
     {
         return $this->hasMany(CustomerHasUser::className(), ['customer_id' => 'id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTickets()
+    {
+        return $this->hasMany(Ticket::className(), ['customer_id' => 'id']);
     }
     
     public function beforeDelete()

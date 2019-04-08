@@ -5,17 +5,19 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Ticket */
 
-$this->title = 'Update Ticket: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Tickets', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$title = 'Редактировать заявку №' . $model->id;
+$this->title = Yii::$app->name . ' | ' . $title;
 ?>
 <div class="ticket-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($title) ?></h1>
+    
+    <p><?= Html::a('Назад', Yii::$app->request->referrer, ['class' => 'btn btn-info']) ?></p>
 
     <?= $this->render('_form', [
         'model' => $model,
+        'cars_model' => $cars_model,
+        'ticket_has_job_model' => $ticket_has_job_model,
     ]) ?>
 
 </div>

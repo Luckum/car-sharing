@@ -246,3 +246,8 @@ table.table > tbody > tr.tr-completed {
 	width: 67%;
 	margin-left: 15px;
 }
+#send-reject-btn,
+#cancel-reject-btn,
+#reject-comment-container {
+	display: none;
+}

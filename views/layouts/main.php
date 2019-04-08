@@ -79,13 +79,19 @@ if (Yii::$app->getSession()->getAllFlashes()) {
                 ]); ?>
                 <?= Html::a('Фотографии', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?php endif; ?>
-            <?= Html::a('Заявки', ['/ticket/index'], ['class' => 'btn btn-default']) ?>
-            <?= Html::a('Сформировать отчёт', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+            <?php if (Yii::$app->user->identity->role !== User::ROLE_BRIGADIER): ?>
+                <?= Html::a('Заявки', ['/ticket/index'], ['class' => 'btn btn-default']) ?>
+                <?= Html::a('Сформировать отчёт', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+            <?php endif; ?>
+            <?php if (Yii::$app->user->identity->role == User::ROLE_BRIGADIER): ?>
+                <?= Html::a('Позвонить в офис', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+                <?= Html::a('Уйти с линии', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+            <?php endif; ?>
             <?= Html::a('Выйти из системы', ['/logout'], ['data-method' => 'post', 'class' => 'btn btn-default']) ?>
             
             <div id="system-messages" style="opacity: 1; display: none">
-            <?= Alert::widget() ?>
-        </div>
+                <?= Alert::widget() ?>
+            </div>
         </div>
     </div>
 

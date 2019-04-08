@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a804c08e0e339bf73a6f535534d16b68",
+    "content-hash": "80ba6f892f3ae342f2d4e11f7e23903a",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -406,49 +406,6 @@
                 "yii2"
             ],
             "time": "2018-12-11T10:34:32+00:00"
-        },
-        {
-            "name": "mirocow/yii2-yandex-maps",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Mirocow/yii2-yandex-maps.git",
-                "reference": "360cf55f1f46edf6bb7b1ad1f1a258fcd1e2f387"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Mirocow/yii2-yandex-maps/zipball/360cf55f1f46edf6bb7b1ad1f1a258fcd1e2f387",
-                "reference": "360cf55f1f46edf6bb7b1ad1f1a258fcd1e2f387",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-0": {
-                    "mirocow\\yandexmaps\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mirocow",
-                    "email": "mr.mirocow@gmail.com",
-                    "homepage": "http://www.mirocow.com"
-                }
-            ],
-            "description": "Yii 2 yandex map module",
-            "keywords": [
-                "map",
-                "yandex",
-                "yii",
-                "yii2"
-            ],
-            "time": "2017-09-27T23:38:24+00:00"
         },
         {
             "name": "softark/yii2-dual-listbox",
@@ -3578,8 +3535,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "softark/yii2-dual-listbox": 20,
-        "kartik-v/yii2-widget-select2": 20,
-        "mirocow/yii2-yandex-maps": 20
+        "kartik-v/yii2-widget-select2": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

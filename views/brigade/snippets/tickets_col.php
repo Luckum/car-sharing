@@ -14,14 +14,7 @@ use app\models\Area;
             </td>
         </tr>
         <tr>
-            <td>
-                <?= Html::dropDownList(
-                    'area',
-                    $model->area_id,
-                    ArrayHelper::map(Area::find()->all(), 'id', 'title'),
-                    ['onchange' => 'setArea(this)', 'data-brigade' => $model->id, 'class' => 'form-control']
-                )?>
-            </td>
+            <td></td>
         </tr>
     </tbody>
 </table>

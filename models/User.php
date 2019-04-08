@@ -247,17 +247,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     
     public function getHeaderTitle()
     {
-        $ret = '';
-        switch ($this->role) {
-            case self::ROLE_ADMIN:
-                $ret = $this->getRoleRu();
-            break;
-            case self::ROLE_OPERATOR:
-                $ret = '<div>Каршеринг "' . $this->customerHasUser->customer->title . '"</div>';
-                $ret .= '<div>Представитель: ' . $this->fullName . '</div>';
-            break;
-        }
-        
-        return $ret;
+        return Yii::$app->view->renderFile('@app/views/user/snippets/_header_title.php', [
+            'model' => $this,
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
+use yii\bootstrap\Modal;
 use app\models\User;
 use app\models\Ticket;
 use app\modules\api\models\Car;
@@ -18,13 +19,15 @@ $this->title = Yii::$app->name . ' | ' . $title;
         <?php if (Yii::$app->user->identity->role == User::ROLE_OPERATOR): ?>
             <?= Html::a('Создать заявку', Url::to(['/ticket/create']), ['class' => 'btn btn-default']) ?>
         <?php endif; ?>
-        <?= Html::a('Все заявки', Url::to(['/ticket/index']), ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Все заявки', Url::to(['/ticket/index']), ['class' => empty($status) ? 'btn btn-info' : 'btn btn-default']) ?>
         <?= Html::a('Новые заявки', Url::to(['/']), ['class' => 'btn btn-default']) ?>
         <?= Html::a('Выполненные заявки', Url::to(['/']), ['class' => 'btn btn-default']) ?>
         <?= Html::a('Отклоненные заявки', Url::to(['/']), ['class' => 'btn btn-default']) ?>
         <?= Html::a('Просроченные', Url::to(['/']), ['class' => 'btn btn-default']) ?>
         
-        <?= Html::a('На главную', ['/'], ['class' => 'btn btn-info']) ?>
+        <?php if (Yii::$app->user->identity->role !== User::ROLE_BRIGADIER): ?>
+            <?= Html::a('На главную', ['/'], ['class' => 'btn btn-info']) ?>
+        <?php endif; ?>
     </div>
     
     <div class="ticket-index-content">
@@ -84,11 +87,14 @@ $this->title = Yii::$app->name . ' | ' . $title;
                     'headerOptions' => ['width' => '13%'],
                     'contentOptions' => ['width' => '13%'],
                     'content' => function ($data) {
-                        return Car::getModelById($data->car_id) . " - <br />" . 'гос. номер<br />' . Car::getNumberById($data->car_id);
+                        $car = new Car();
+                        $car->carId = $data->car_id;
+                        $car->getData();
+                        return $car->model . " - <br />" . 'гос. номер<br />' . $car->number;
                     }
                 ],
                 [
-                    'attribute' => 'placeColumnHtmlFormatted',
+                    'attribute' => 'locationColumnHtmlFormatted',
                     'format' => 'raw',
                     'headerOptions' => ['width' => '20%'],
                     'contentOptions' => ['width' => '20%']
@@ -111,3 +117,44 @@ $this->title = Yii::$app->name . ' | ' . $title;
         ]); ?>
     </div>
 </div>
+<?php $script = <<<JS
+$(document).ready(function () {
+    $('#car-location-map').on('shown.bs.modal', function (e) {
+        $("#map-container").html('');
+        ymaps.ready(init);
+        function init(){ 
+            var myMap = new ymaps.Map("map-container", {
+                center: [$(e.relatedTarget).attr("data-lat"), $(e.relatedTarget).attr("data-lon")],
+                zoom: 19
+            });
+            myMap.geoObjects.add(new ymaps.GeoObject(
+                {
+                    geometry: {
+                        type: "Point",
+                        coordinates: [$(e.relatedTarget).attr("data-lat"), $(e.relatedTarget).attr("data-lon")]
+                    },
+                    properties: {
+                        iconContent: $(e.relatedTarget).attr("data-model") + " (" + $(e.relatedTarget).attr("data-number") + ")"
+                    }
+                }, 
+                {
+                    preset: 'islands#redStretchyIcon'
+                }
+            ));
+        }
+    });
+})
+JS;
+$this->registerJs($script, $this::POS_END);
+?>
+<?php Modal::begin([
+    'id' => 'car-location-map',
+    'options' => ['tabindex' => false],
+    'size' => 'modal-lg',
+    'footer' => '<a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Закрыть</a>'
+]); ?>
+
+    <div id="map-container" style="width: 100%; height: 640px;"></div>
+
+<?php Modal::end(); ?>
+

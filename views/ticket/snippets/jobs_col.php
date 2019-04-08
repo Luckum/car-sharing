@@ -1,3 +1,8 @@
+<?php
+
+use yii\helpers\Url;
+
+?>
 <table>
     <tbody>
         <tr class="tr-top">
@@ -8,7 +13,7 @@
             </td>
         </tr>
         <tr>
-            <td><a class="btn btn-default" href="javascript:void(0)">посмотреть заявку</a></td>
+            <td><a class="btn btn-default" href="<?= Url::to(['/ticket/view', 'id' => $model->id]) ?>">посмотреть заявку</a></td>
         </tr>
     </tbody>
 </table>

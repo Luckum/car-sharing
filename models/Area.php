@@ -10,8 +10,8 @@ use Yii;
  * @property int $id
  * @property string $title
  * @property string $zip
- *
- * @property Brigade[] $brigades
+ * 
+ * @property BrigadeHasArea[] $brigadeHasAreas
  */
 class Area extends \yii\db\ActiveRecord
 {
@@ -46,15 +46,15 @@ class Area extends \yii\db\ActiveRecord
             'zip' => 'Индекс',
         ];
     }
-
+    
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBrigades()
+    public function getBrigadeHasAreas()
     {
-        return $this->hasMany(Brigade::className(), ['area_id' => 'id']);
+        return $this->hasMany(BrigadeHasArea::className(), ['area_id' => 'id']);
     }
-    
+
     public function getTitleWithZip()
     {
         return $this->title . ' (' . $this->zip . ')';

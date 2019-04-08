@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Brigade;
 use app\models\BrigadeHasUser;
+use app\models\BrigadeHasArea;
 use app\models\User;
 use app\models\Ticket;
 use yii\data\ActiveDataProvider;
@@ -106,10 +107,21 @@ class BrigadeController extends BaseController
     {
         $model = new Brigade();
         $model_brigade_has_user = new BrigadeHasUser;
+        $model_brigade_has_area = new BrigadeHasArea;
 
         if ($model->load(Yii::$app->request->post())) {
             $model->status = Brigade::STATUS_OFFLINE;
             if ($model->save()) {
+                if ($model_brigade_has_area->load(Yii::$app->request->post())) {
+                    $areas = $model_brigade_has_area->area_id;
+                    foreach ($areas as $area_id) {
+                        $model_brigade_has_area = new BrigadeHasArea;
+                        $model_brigade_has_area->area_id = $area_id;
+                        $model_brigade_has_area->brigade_id = $model->id;
+                        $model_brigade_has_area->save();
+                    }
+                }
+                
                 if ($model_brigade_has_user->load(Yii::$app->request->post())) {
                     $users = $model_brigade_has_user->user_id;
                     
@@ -136,6 +148,7 @@ class BrigadeController extends BaseController
         return $this->render('create', [
             'model' => $model,
             'model_brigade_has_user' => $model_brigade_has_user,
+            'model_brigade_has_area' => $model_brigade_has_area,
         ]);
     }
 
@@ -150,8 +163,20 @@ class BrigadeController extends BaseController
     {
         $model = $this->findModel($id);
         $model_brigade_has_user = new BrigadeHasUser;
+        $model_brigade_has_area = new BrigadeHasArea;
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            BrigadeHasArea::deleteAll(['brigade_id' => $model->id]);
+            if ($model_brigade_has_area->load(Yii::$app->request->post())) {
+                $areas = $model_brigade_has_area->area_id;
+                foreach ($areas as $area_id) {
+                    $model_brigade_has_area = new BrigadeHasArea;
+                    $model_brigade_has_area->area_id = $area_id;
+                    $model_brigade_has_area->brigade_id = $model->id;
+                    $model_brigade_has_area->save();
+                }
+            }
+                
             BrigadeHasUser::deleteAll(['brigade_id' => $model->id]);
             if ($model_brigade_has_user->load(Yii::$app->request->post())) {
                 $users = $model_brigade_has_user->user_id;
@@ -178,6 +203,7 @@ class BrigadeController extends BaseController
         return $this->render('update', [
             'model' => $model,
             'model_brigade_has_user' => $model_brigade_has_user,
+            'model_brigade_has_area' => $model_brigade_has_area,
         ]);
     }
 

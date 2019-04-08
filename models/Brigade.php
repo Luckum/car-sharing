@@ -11,12 +11,11 @@ use Yii;
  * @property string $title
  * @property string $status
  * @property int $active
- * @property int $area_id
  * @property string $created_at
  *
- * @property Area $area
  * @property BrigadeHasUser[] $brigadeHasUsers
  * @property BrigadeStatus[] $brigadeStatuses
+ * @property BrigadeHasArea[] $brigadeHasAreas
  * @property Ticket[] $tickets
  */
 class Brigade extends \yii\db\ActiveRecord
@@ -48,12 +47,11 @@ class Brigade extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'status', 'active', 'area_id'], 'required'],
+            [['title', 'status', 'active'], 'required'],
             [['status'], 'string'],
-            [['area_id', 'active'], 'integer'],
+            [['active'], 'integer'],
             [['created_at'], 'safe'],
             [['title'], 'string', 'max' => 100],
-            [['area_id'], 'exist', 'skipOnError' => true, 'targetClass' => Area::className(), 'targetAttribute' => ['area_id' => 'id']],
         ];
     }
 
@@ -67,7 +65,6 @@ class Brigade extends \yii\db\ActiveRecord
             'title' => 'Название',
             'status' => 'Статус',
             'active' => 'Активна',
-            'area_id' => 'Квадрант',
             'created_at' => 'Дата создания',
             'teamColumnHtmlFormatted' => 'Состав бригады',
             'statusColumnHtmlFormatted' => 'Статус',
@@ -77,14 +74,15 @@ class Brigade extends \yii\db\ActiveRecord
         ];
     }
 
+    
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getArea()
+    public function getBrigadeHasAreas()
     {
-        return $this->hasOne(Area::className(), ['id' => 'area_id']);
+        return $this->hasMany(BrigadeHasArea::className(), ['brigade_id' => 'id']);
     }
-
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -170,5 +168,32 @@ class Brigade extends \yii\db\ActiveRecord
         return Yii::$app->view->renderFile('@app/views/brigade/snippets/buttons_col.php', [
             'model' => $this,
         ]);
+    }
+    
+    public function getDescriptor()
+    {
+        return $this->title . ' (' . $this->masterName . ') - ' . $this->getStatusRu() . ($this->status != self::STATUS_OFFLINE ? ' - ' . $this->jobStatus : '');
+    }
+    
+    public function getMasterName()
+    {
+        $brigade = BrigadeHasUser::find()->where(['brigade_id' => $this->id, 'is_master' => 1])->one();
+        return $brigade->user->fullName;
+    }
+    
+    public function getJobStatus()
+    {
+        if (Ticket::find()->where(['brigade_id' => $this->id, 'status' => Ticket::STATUS_IN_WORK])->exists()) {
+            return 'занята';
+        }
+        return 'свободна';
+    }
+    
+    public function getIsBusy()
+    {
+        if (Ticket::find()->where(['brigade_id' => $this->id, 'status' => Ticket::STATUS_IN_WORK])->exists()) {
+            return true;
+        }
+        return false;
     }
 }
