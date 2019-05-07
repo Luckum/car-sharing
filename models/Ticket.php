@@ -263,19 +263,21 @@ class Ticket extends \yii\db\ActiveRecord
     public function getSpentTime()
     {
         $ret = '';
-        if ($this->status == self::STATUS_IN_WORK) {
-            $end = new \DateTime();
-        } else {
-            $end = \DateTime::createFromFormat("Y-m-d H:i:s", $this->finished_at);
+        if ($this->started_at && $this->finished_at) {
+            
+            if ($this->status == self::STATUS_IN_WORK) {
+                $end = new \DateTime();
+            } else {
+                $end = \DateTime::createFromFormat("Y-m-d H:i:s", $this->finished_at);
+            }
+            
+            $start = \DateTime::createFromFormat("Y-m-d H:i:s", $this->started_at);
+            $interval = $end->diff($start);
+            
+            $ret .= $interval->d > 0 ? $interval->d . 'д. ' : '';
+            $ret .= $interval->h > 0 ? $interval->h . 'ч. ' : '';
+            $ret .= $interval->i > 0 ? $interval->i . 'м. ' : '';
         }
-        
-        $start = \DateTime::createFromFormat("Y-m-d H:i:s", $this->started_at);
-        $interval = $end->diff($start);
-        
-        $ret .= $interval->d > 0 ? $interval->d . 'д. ' : '';
-        $ret .= $interval->h > 0 ? $interval->h . 'ч. ' : '';
-        $ret .= $interval->i > 0 ? $interval->i . 'м. ' : '';
-        
         return $ret;
     }
 }
