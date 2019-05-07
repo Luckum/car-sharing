@@ -73,4 +73,9 @@ class Car extends Model
     {
         return $this->car->cars[0]->vin;
     }
+    
+    public function getFuel()
+    {
+        return $this->car->cars[0]->fuel;
+    }
 }

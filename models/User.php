@@ -124,7 +124,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'active' => self::STATUS_ACTIVE]);
+        return static::find()->where(['username' => $username, 'active' => self::STATUS_ACTIVE])->andWhere(['!=', 'role', self::ROLE_OPERATOR])->one();
     }
     
     public function validatePassword($password)

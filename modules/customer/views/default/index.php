@@ -1,3 +1,10 @@
+<?php
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+
+?>
+
 <?php $script = '
 $(document).ready(function () {
     $("#map-container").html("");
@@ -17,7 +24,7 @@ foreach ($cars_model->cars as $car) {
                     coordinates: [' . $car->lat . ', ' . $car->lon . ']
                 },
                 properties: {
-                    iconContent: "' . $car->model . ' - гос. номер ' . $car->gnum . '"
+                    iconContent: "' . $car->model . ' - ' . $car->gnum . ', ' . $car->fuel . ' л."
                 }
             }, 
             {
@@ -29,7 +36,11 @@ $script .= '
     }
 })';
 $this->registerJs($script, $this::POS_END);
+$this->title = 'Компания каршеринга ' . Yii::$app->user->identity->customerHasUser->customer->title . ' | Панель управления';
 ?> 
 <div class="customer-default-index">
-    <div id="map-container" style="width: 100%; height: 640px;"></div>
+    <div class="customer-index-buttons">
+        <?= Html::a('Список', Url::to(['/list']), ['class' => 'btn btn-default']) ?>
+    </div>
+    <div id="map-container" style="width: 100%; height: 640px; margin-top: 25px;"></div>
 </div>
