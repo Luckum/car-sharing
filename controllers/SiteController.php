@@ -62,11 +62,12 @@ class SiteController extends BaseController
      */
     public function actionIndex()
     {
-        if (Yii::$app->user->identity->role == User::ROLE_BRIGADIER) {
-            return $this->redirect(['/ticket/index']);
+        $query = User::find()->where(['!=', 'role', User::ROLE_ADMIN])->andWhere(['!=', 'role', User::ROLE_OPERATOR]);
+        if (Yii::$app->user->identity->role == User::ROLE_MANAGER) {
+            $query->andWhere(['!=', 'role', User::ROLE_MANAGER]);
         }
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find()->where(['!=', 'role', User::ROLE_ADMIN])->andWhere(['!=', 'role', User::ROLE_OPERATOR]),
+            'query' => $query,
             'sort' => false
         ]);
         return $this->render('index', [

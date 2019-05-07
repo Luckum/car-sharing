@@ -5,6 +5,7 @@ namespace app\modules\customer\controllers;
 use Yii;
 use app\controllers\SiteController;
 use app\modules\customer\models\OperatorLoginForm;
+use app\modules\api\models\Car;
 
 /**
  * Default controller for the `customer` module
@@ -17,7 +18,12 @@ class DefaultController extends SiteController
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $cars_model = new Car();
+        $cars_model->getData();
+        
+        return $this->render('index', [
+            'cars_model' => $cars_model
+        ]);
     }
     
     public function actionLogin()

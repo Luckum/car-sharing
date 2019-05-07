@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use app\modules\api\models\Geo;
+use app\modules\api\models\Car;
 
 /**
  * This is the model class for table "brigade".
@@ -158,8 +160,24 @@ class Brigade extends \yii\db\ActiveRecord
     
     public function getCurrentTicketColumnHtmlFormatted()
     {
+        $car = [];
+        if ($this->currentTicket) {
+            $location = new Geo;
+            $car = new Car;
+            
+            $car->carId = $this->currentTicket->car_id;
+            $car->getData();
+            
+            $location->ticketId = $this->currentTicket->id;
+            $location->lon = $car->lon;
+            $location->lat = $car->lat;
+            $location->getData();
+        }
+        
+        
         return Yii::$app->view->renderFile('@app/views/brigade/snippets/current_ticket_col.php', [
             'model' => $this,
+            'car' => $car,
         ]);
     }
     
@@ -193,6 +211,15 @@ class Brigade extends \yii\db\ActiveRecord
     {
         if (Ticket::find()->where(['brigade_id' => $this->id, 'status' => Ticket::STATUS_IN_WORK])->exists()) {
             return true;
+        }
+        return false;
+    }
+    
+    public function getCurrentTicket()
+    {
+        $ticket = Ticket::find()->where(['brigade_id' => $this->id, 'status' => Ticket::STATUS_IN_WORK])->one();
+        if ($ticket) {
+            return $ticket;
         }
         return false;
     }

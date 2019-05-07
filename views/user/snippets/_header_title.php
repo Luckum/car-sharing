@@ -20,7 +20,30 @@ switch ($model->role):
 <?php
         endif;
 ?>
-        <div>Бригадир: <?= $model->fullName ?></div>
+        <div><?= $model->getRoleRu() ?>: <?= $model->fullName ?></div>
+<?php
+        if (isset($model->brigadeHasUser)):
+            foreach ($model->brigadeHasUser->brigade->brigadeHasAreas as $area):
+?>
+                <div><?= $area->area->title ?></div>
+<?php
+            endforeach;
+        endif;
+    break;
+    case User::ROLE_MANAGER:
+?>
+        <div><?= $model->fullName ?></div>
+        <div><?= $model->getRoleRu() ?></div>
+<?php
+    break;
+    case User::ROLE_WORKER:
+        if (isset($model->brigadeHasUser)):
+?>
+            <div>Бригада: <?= $model->brigadeHasUser->brigade->title ?> - <?= Html::a('состав бригады', 'javascript:void(0)') ?></div>
+<?php
+        endif;
+?>
+        <div><?= $model->getRoleRu() ?>: <?= $model->fullName ?></div>
 <?php
         if (isset($model->brigadeHasUser)):
             foreach ($model->brigadeHasUser->brigade->brigadeHasAreas as $area):

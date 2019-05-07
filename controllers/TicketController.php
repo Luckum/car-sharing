@@ -41,12 +41,53 @@ class TicketController extends BaseController
         $query = Ticket::find();
         
         if (!empty($status)) {
-            $query->where(['ticket.status' => $status]);
+            if ($status == 'new') {
+                $query->where(['ticket.status' => Ticket::STATUS_ASAP]);
+                $query->orWhere(['ticket.status' => Ticket::STATUS_COMMON]);
+            } else {
+                $query->where(['ticket.status' => $status]);
+            }
         }
         
         if (Yii::$app->user->identity->role == User::ROLE_BRIGADIER) {
             $tickets = Ticket::getTicketsForBrigade(Yii::$app->user->identity->brigadeHasUser->brigade_id);
-            $query->where(['id' => $tickets]);
+            if (!empty($status)) {
+                $query->andWhere(['id' => $tickets]);
+            } else {
+                $query->where(['id' => $tickets]);
+            }
+            
+        }
+        
+        $sort_order = Yii::$app->request->post('sort');
+        switch ($sort_order) {
+            case 'urgency':
+                $query->orderBy([new \yii\db\Expression(
+                    'FIELD(status, ' . 
+                    Ticket::STATUS_ASAP . ', ' . 
+                    Ticket::STATUS_COMMON . ', ' . 
+                    Ticket::STATUS_COMPLETED . ', ' . 
+                    Ticket::STATUS_IN_WORK . ', ' . 
+                    Ticket::STATUS_REJECTED . ', ' .
+                    Ticket::STATUS_DELAYED . ')'
+                )]);
+            break;
+            case 'date':
+                $query->orderBy('created_at DESC');
+            break;
+            case 'address':
+                
+            break;
+            default:
+                $query->orderBy([new \yii\db\Expression(
+                    'FIELD(status, ' . 
+                    Ticket::STATUS_ASAP . ', ' . 
+                    Ticket::STATUS_COMMON . ', ' . 
+                    Ticket::STATUS_COMPLETED . ', ' . 
+                    Ticket::STATUS_IN_WORK . ', ' . 
+                    Ticket::STATUS_REJECTED . ', ' .
+                    Ticket::STATUS_DELAYED . ')'
+                )]);
         }
         
         $dataProvider = new ActiveDataProvider([

@@ -39,6 +39,11 @@ class Car extends Model
         return $ret;
     }
     
+    public function getCars()
+    {
+        return $this->cars->cars;
+    }
+    
     public function getLat()
     {
         return $this->car->cars[0]->lat;

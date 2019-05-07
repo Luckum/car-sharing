@@ -11,7 +11,9 @@ $this->title = Yii::$app->name;
     <div class="site-index-buttons">
         <?= Html::a('Собрать бригаду', ['/brigade/create'], ['class' => 'btn btn-default']) ?>
         <?= Html::a('Добавить рабочего', ['/user/create', 'role' => User::ROLE_WORKER], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Добавить менеджера', ['/user/create', 'role' => User::ROLE_MANAGER], ['class' => 'btn btn-default']) ?>
+        <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN): ?>
+            <?= Html::a('Добавить менеджера', ['/user/create', 'role' => User::ROLE_MANAGER], ['class' => 'btn btn-default']) ?>
+        <?php endif; ?>
         <?= Html::a('Список бригад', ['/brigade/index'], ['class' => 'btn btn-default']) ?>
     </div>
     <?php Pjax::begin(['id' => 'site-index-pjax']); ?>

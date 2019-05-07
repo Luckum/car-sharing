@@ -126,7 +126,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
                 'value' => function ($data) {
                     return Html::input('text', 'milage', '', ['id' => 'milage', 'placeholder' => 'км', 'class' => 'form-control']);
                 },
-                'visible' => $model->status == Ticket::STATUS_IN_WORK,
+                'visible' => $model->status == Ticket::STATUS_IN_WORK && Yii::$app->user->identity->role == User::ROLE_BRIGADIER,
             ],
             [
                 'label' => 'Уровень топлива в баке',
@@ -134,7 +134,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
                 'value' => function ($data) {
                     return Html::input('text', 'fuel', '', ['id' => 'fuel', 'placeholder' => 'литры', 'class' => 'form-control']);
                 },
-                'visible' => $model->status == Ticket::STATUS_IN_WORK,
+                'visible' => $model->status == Ticket::STATUS_IN_WORK && Yii::$app->user->identity->role == User::ROLE_BRIGADIER,
             ],
         ],
     ]) ?>

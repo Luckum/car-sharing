@@ -32,7 +32,7 @@ use app\modules\api\models\Car;
  */
 class Ticket extends \yii\db\ActiveRecord
 {
-    const STATUS_REJECTED = 0;
+    const STATUS_REJECTED = 6;
     const STATUS_COMMON = 1;
     const STATUS_ASAP = 2;
     const STATUS_IN_WORK = 3;
@@ -250,7 +250,13 @@ class Ticket extends \yii\db\ActiveRecord
     
     public function getJobsTimeFormatted()
     {
-        list($num_int, $num_float) = explode('.', (string)$this->jobsTime);
+        if ($this->jobsTime - floor($this->jobsTime)) {
+            list($num_int, $num_float) = explode('.', (string)$this->jobsTime);
+        } else {
+            $num_int = $this->jobsTime;
+            $num_float = '00';
+        }
+        
         return $num_int . 'ч.' . $num_float . 'м.';
     }
     

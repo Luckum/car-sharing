@@ -10,6 +10,7 @@ use app\assets\AppAsset;
 use yii\bootstrap\ButtonDropdown;
 
 use app\models\User;         
+use app\models\Brigade;         
 
 AppAsset::register($this);
 
@@ -77,15 +78,29 @@ if (Yii::$app->getSession()->getAllFlashes()) {
                             ]
                         ]
                 ]); ?>
+            <?php endif; ?>
+            <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_MANAGER): ?>
                 <?= Html::a('Фотографии', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?php endif; ?>
-            <?php if (Yii::$app->user->identity->role !== User::ROLE_BRIGADIER): ?>
-                <?= Html::a('Заявки', ['/ticket/index'], ['class' => 'btn btn-default']) ?>
+            <?php if (Yii::$app->user->identity->role !== User::ROLE_BRIGADIER && Yii::$app->user->identity->role !== User::ROLE_WORKER): ?>
+                <?php if (Yii::$app->controller->id != 'ticket'): ?>
+                    <?= Html::a('Заявки', ['/ticket/index'], ['class' => 'btn btn-default']) ?>
+                <?php else: ?>
+                    <?php if (Yii::$app->user->identity->role == User::ROLE_MANAGER): ?>
+                        <?= Html::a('Бригады', ['/brigade/index'], ['class' => 'btn btn-default']) ?>
+                    <?php elseif (Yii::$app->user->identity->role == User::ROLE_OPERATOR): ?>
+                        <?= Html::a('Карта', ['/'], ['class' => 'btn btn-default']) ?>
+                    <?php endif; ?>
+                <?php endif; ?>
                 <?= Html::a('Сформировать отчёт', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?php endif; ?>
             <?php if (Yii::$app->user->identity->role == User::ROLE_BRIGADIER): ?>
                 <?= Html::a('Позвонить в офис', 'javascript:void();', ['class' => 'btn btn-default']) ?>
-                <?= Html::a('Уйти с линии', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+                <?php if (Yii::$app->user->identity->brigadeHasUser->brigade->status == Brigade::STATUS_ONLINE): ?>
+                    <?= Html::a('Уйти с линии', ['/brigade/set-pause', 'id' => Yii::$app->user->identity->brigadeHasUser->brigade_id], ['class' => 'btn btn-default']) ?>
+                <?php elseif (Yii::$app->user->identity->brigadeHasUser->brigade->status == Brigade::STATUS_PAUSE): ?>
+                    <?= Html::a('Вернуться на линию', ['/brigade/set-online', 'id' => Yii::$app->user->identity->brigadeHasUser->brigade_id], ['class' => 'btn btn-default']) ?>
+                <?php endif; ?>
             <?php endif; ?>
             <?= Html::a('Выйти из системы', ['/logout'], ['data-method' => 'post', 'class' => 'btn btn-default']) ?>
             

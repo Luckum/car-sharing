@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
 use app\models\Brigade;
 
 /* @var $this yii\web\View */
@@ -121,3 +122,44 @@ $sort_items = [
         </div>
     <?php Pjax::end(); ?>
 </div>
+<?php $script = <<<JS
+$(document).ready(function () {
+    $('#car-location-map').on('shown.bs.modal', function (e) {
+        $("#map-container").html('');
+        ymaps.ready(init);
+        function init(){ 
+            var myMap = new ymaps.Map("map-container", {
+                center: [$(e.relatedTarget).attr("data-lat"), $(e.relatedTarget).attr("data-lon")],
+                zoom: 19
+            });
+            myMap.geoObjects.add(new ymaps.GeoObject(
+                {
+                    geometry: {
+                        type: "Point",
+                        coordinates: [$(e.relatedTarget).attr("data-lat"), $(e.relatedTarget).attr("data-lon")]
+                    },
+                    properties: {
+                        iconContent: $(e.relatedTarget).attr("data-model") + " (" + $(e.relatedTarget).attr("data-number") + ")"
+                    }
+                }, 
+                {
+                    preset: 'islands#redStretchyIcon'
+                }
+            ));
+        }
+    });
+})
+JS;
+$this->registerJs($script, $this::POS_END);
+?>
+
+<?php Modal::begin([
+    'id' => 'car-location-map',
+    'options' => ['tabindex' => false],
+    'size' => 'modal-lg',
+    'footer' => '<a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Закрыть</a>'
+]); ?>
+
+    <div id="map-container" style="width: 100%; height: 640px;"></div>
+
+<?php Modal::end(); ?>

@@ -12,6 +12,7 @@ use yii\data\ActiveDataProvider;
 use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * BrigadeController implements the CRUD actions for Brigade model.
@@ -30,6 +31,7 @@ class BrigadeController extends BaseController
                     'delete' => ['POST'],
                 ],
             ],
+            
         ];
     }
 
@@ -241,6 +243,24 @@ class BrigadeController extends BaseController
     {
         $model = $this->findModel($id);
         $model->status = Brigade::STATUS_OFFLINE;
+        $model->save();
+        
+        return $this->redirect(['index']);
+    }
+    
+    public function actionSetPause($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = Brigade::STATUS_PAUSE;
+        $model->save();
+        
+        return $this->redirect(['index']);
+    }
+    
+    public function actionSetOnline($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = Brigade::STATUS_ONLINE;
         $model->save();
         
         return $this->redirect(['index']);
