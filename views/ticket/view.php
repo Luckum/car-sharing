@@ -115,7 +115,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
             ],
             [
                 'label' => 'Исполнитель',
-                'value' => 'Бригада "' . $model->brigade->title . '"',
+                'value' => isset($model->brigade) ? 'Бригада "' . $model->brigade->title . '"' : '',
                 'visible' => $model->status == Ticket::STATUS_IN_WORK || $model->status == Ticket::STATUS_COMPLETED,
             ],
             [
