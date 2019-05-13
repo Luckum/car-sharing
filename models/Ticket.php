@@ -102,6 +102,7 @@ class Ticket extends \yii\db\ActiveRecord
             'lat' => 'Lat',
             'lon' => 'Lon',
             'car_id' => 'Автомобиль',
+            'carDetailsColumnHtmlFormatted' => 'Автомобиль',
             'locationColumnHtmlFormatted' => 'Расположение',
             'jobsColumnHtmlFormatted' => 'Необходимые работы',
             'customer_id' => 'Компания каршеринга',
@@ -279,5 +280,16 @@ class Ticket extends \yii\db\ActiveRecord
             $ret .= $interval->i > 0 ? $interval->i . 'м. ' : '';
         }
         return $ret;
+    }
+    
+    public function getCarDetailsColumnHtmlFormatted()
+    {
+        $car = new Car();
+        $car->carId = $this->car_id;
+        $car->getData();
+        
+        return Yii::$app->view->renderFile('@app/views/ticket/snippets/car_details_col.php', [
+            'car' => $car,
+        ]);
     }
 }

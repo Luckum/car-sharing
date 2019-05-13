@@ -78,4 +78,29 @@ class Car extends Model
     {
         return $this->car->cars[0]->fuel;
     }
+    
+    public function getColor()
+    {
+        return $this->car->cars[0]->color;
+    }
+    
+    public function getImei()
+    {
+        return $this->car->cars[0]->imei;
+    }
+    
+    public function getMileage()
+    {
+        return $this->car->cars[0]->mileage;
+    }
+    
+    public function getFuelAbs()
+    {
+        return $this->car->cars[0]->fuelAbs;
+    }
+    
+    public function getFuelmax()
+    {
+        return $this->car->cars[0]->fuelmax;
+    }
 }

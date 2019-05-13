@@ -23,8 +23,9 @@ $sort_items = [
 
     <div class="brigade-index-buttons">
         <?= Html::a('Все', Url::to(['/brigade/index']), ['class' => empty($status) ? 'btn btn-info' : 'btn btn-default']) ?>
+        <?= Html::a('В работе', Url::to(['/brigade/index', 'status' => Brigade::STATUS_IN_WORK]), ['class' => $status == Brigade::STATUS_IN_WORK ? 'btn btn-info' : 'btn btn-default']) ?>
         <?= Html::a('На линии', Url::to(['/brigade/index', 'status' => Brigade::STATUS_ONLINE]), ['class' => $status == Brigade::STATUS_ONLINE ? 'btn btn-info' : 'btn btn-default']) ?>
-        <?= Html::a('Простой', Url::to(['/brigade/index', 'status' => Brigade::STATUS_PAUSE]), ['class' => $status == Brigade::STATUS_PAUSE ? 'btn btn-info' : 'btn btn-default']) ?>
+        <?= Html::a('Перерыв', Url::to(['/brigade/index', 'status' => Brigade::STATUS_PAUSE]), ['class' => $status == Brigade::STATUS_PAUSE ? 'btn btn-info' : 'btn btn-default']) ?>
         <?= Html::a('Офлайн', Url::to(['/brigade/index', 'status' => Brigade::STATUS_OFFLINE]), ['class' => $status == Brigade::STATUS_OFFLINE ? 'btn btn-info' : 'btn btn-default']) ?>
         
         <?= Html::a('Собрать бригаду', ['/brigade/create'], ['class' => 'btn btn-default']) ?>
@@ -62,6 +63,9 @@ $sort_items = [
                         break;
                         case Brigade::STATUS_PAUSE:
                             $class = 'tr-pause';
+                        break;
+                        case Brigade::STATUS_IN_WORK:
+                            $class = 'tr-work';
                         break;
                         default:
                             $class = 'tr-default';

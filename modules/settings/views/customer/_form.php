@@ -17,7 +17,7 @@ use app\models\Customer;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'subdomain')->textInput(['maxlength' => true])->label(Customer::instance()->getAttributeLabel('subdomain') . ' (*.' . Yii::$app->request->hostName . ')') ?>
+    <?= $form->field($model, 'subdomain')->textInput(['maxlength' => true])->label(Customer::instance()->getAttributeLabel('subdomain') . ' для ' . Yii::$app->request->hostName . ' (без указания основного домена)') ?>
     
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     

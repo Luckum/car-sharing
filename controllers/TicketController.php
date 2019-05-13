@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Ticket;
 use app\models\User;
+use app\models\Brigade;
 use app\modules\api\models\Car;
 
 use yii\data\ActiveDataProvider;
@@ -111,13 +112,8 @@ class TicketController extends BaseController
     {
         $model = $this->findModel($id);
         
-        $car = new Car();
-        $car->carId = $model->car_id;
-        $car->getData();
-        
         return $this->render('view', [
             'model' => $model,
-            'car' => $car,
         ]);
     }
 
@@ -178,8 +174,12 @@ class TicketController extends BaseController
         $model->started_at = date('Y-m-d H:i:s');
         $model->brigade_id = Yii::$app->user->identity->brigadeHasUser->brigade_id;
         if ($model->save()) {
-            Yii::$app->session->setFlash('success', 'Заявка принята в работу');
-            return $this->redirect(['view', 'id' => $id]);
+            $model_brigade = Brigade::findOne(Yii::$app->user->identity->brigadeHasUser->brigade_id);
+            $model_brigade->status = Brigade::STATUS_IN_WORK;
+            if ($model_brigade->save()) {
+                Yii::$app->session->setFlash('success', 'Заявка принята в работу');
+                return $this->redirect(['view', 'id' => $id]);
+            }
         }
     }
     
@@ -193,7 +193,11 @@ class TicketController extends BaseController
                     $model->status = Ticket::STATUS_COMPLETED;
                     $model->finished_at = date('Y-m-d H:i:s');
                     if ($model->save()) {
-                        Yii::$app->session->setFlash('success', 'Заявка завершена');
+                        $model_brigade = Brigade::findOne(Yii::$app->user->identity->brigadeHasUser->brigade_id);
+                        $model_brigade->status = Brigade::STATUS_ONLINE;
+                        if ($model_brigade->save()) {
+                            Yii::$app->session->setFlash('success', 'Заявка завершена');
+                        }
                     }
                 } else {
                     Yii::$app->session->setFlash('error', 'Необходимо указать уровень топлива');

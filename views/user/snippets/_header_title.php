@@ -20,6 +20,7 @@ switch ($model->role):
 <?php
         endif;
 ?>
+        <div>Статус: <?= $model->brigadeHasUser->brigade->statusRu ?></div>
         <div><?= $model->getRoleRu() ?>: <?= $model->fullName ?></div>
 <?php
         if (isset($model->brigadeHasUser)):
@@ -43,6 +44,7 @@ switch ($model->role):
 <?php
         endif;
 ?>
+        <div>Статус: <?= $model->brigadeHasUser->brigade->statusRu ?></div>
         <div><?= $model->getRoleRu() ?>: <?= $model->fullName ?></div>
 <?php
         if (isset($model->brigadeHasUser)):

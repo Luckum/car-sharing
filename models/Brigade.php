@@ -25,6 +25,7 @@ class Brigade extends \yii\db\ActiveRecord
     const STATUS_ONLINE = 'online';
     const STATUS_OFFLINE = 'offline';
     const STATUS_PAUSE = 'pause';
+    const STATUS_IN_WORK = 'work';
     
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
@@ -32,7 +33,8 @@ class Brigade extends \yii\db\ActiveRecord
     protected $statusRu = [
         self::STATUS_ONLINE => 'На линии',
         self::STATUS_OFFLINE => 'Офлайн',
-        self::STATUS_PAUSE => 'Простой',
+        self::STATUS_PAUSE => 'Перерыв',
+        self::STATUS_IN_WORK => 'В работе',
     ];
     
     /**

@@ -232,6 +232,9 @@ table.table > tbody > tr.tr-online {
 table.table > tbody > tr.tr-pause {
 	background-color: #ffe598;
 }
+table.table > tbody > tr.tr-work {
+	background-color: #95bcf3;
+}
 table.table > tbody > tr.tr-default {
 	background-color: #fff;
 }

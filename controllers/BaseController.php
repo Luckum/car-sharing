@@ -17,7 +17,8 @@ class BaseController extends Controller
         'basic' => [
             'brigade' => [
                 'set-pause',
-                'set-online'
+                'set-online',
+                'set-offline',
             ],
             'ticket' => [
                 'index',

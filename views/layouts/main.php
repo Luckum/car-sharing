@@ -97,8 +97,11 @@ if (Yii::$app->getSession()->getAllFlashes()) {
             <?php if (Yii::$app->user->identity->role == User::ROLE_BRIGADIER): ?>
                 <?= Html::a('Позвонить в офис', 'javascript:void();', ['class' => 'btn btn-default']) ?>
                 <?php if (Yii::$app->user->identity->brigadeHasUser->brigade->status == Brigade::STATUS_ONLINE): ?>
-                    <?= Html::a('Уйти с линии', ['/brigade/set-pause', 'id' => Yii::$app->user->identity->brigadeHasUser->brigade_id], ['class' => 'btn btn-default']) ?>
+                    <?= Html::a('Уйти с линии', ['/brigade/set-offline', 'id' => Yii::$app->user->identity->brigadeHasUser->brigade_id], ['class' => 'btn btn-default']) ?>
+                    <?= Html::a('Уйти на перерыв', ['/brigade/set-pause', 'id' => Yii::$app->user->identity->brigadeHasUser->brigade_id], ['class' => 'btn btn-default']) ?>
                 <?php elseif (Yii::$app->user->identity->brigadeHasUser->brigade->status == Brigade::STATUS_PAUSE): ?>
+                    <?= Html::a('Вернуться на линию', ['/brigade/set-online', 'id' => Yii::$app->user->identity->brigadeHasUser->brigade_id], ['class' => 'btn btn-default']) ?>
+                <?php elseif (Yii::$app->user->identity->brigadeHasUser->brigade->status == Brigade::STATUS_OFFLINE): ?>
                     <?= Html::a('Вернуться на линию', ['/brigade/set-online', 'id' => Yii::$app->user->identity->brigadeHasUser->brigade_id], ['class' => 'btn btn-default']) ?>
                 <?php endif; ?>
             <?php endif; ?>

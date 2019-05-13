@@ -11,10 +11,10 @@ use app\models\Brigade;
         </tr>
         <tr>
             <td>
-            <?php if ($model->status == Brigade::STATUS_ONLINE): ?>
+            <?php if ($model->status == Brigade::STATUS_ONLINE || $model->status == Brigade::STATUS_PAUSE): ?>
                 <?= Html::a(
                     'снять с линии',
-                    ['/brigade/set-pause', 'id' => $model->id],
+                    ['/brigade/set-offline', 'id' => $model->id],
                     [
                         'class' => 'btn btn-default',
                         'data' => [
@@ -23,6 +23,8 @@ use app\models\Brigade;
                         ]
                     ]
                 ) ?>
+            <?php elseif ($model->status == Brigade::STATUS_OFFLINE): ?>
+                <?= Html::a('на линию', ['/brigade/set-online', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
             <?php endif; ?>
             </td>
         </tr>

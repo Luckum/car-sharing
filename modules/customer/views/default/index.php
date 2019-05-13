@@ -24,7 +24,7 @@ foreach ($cars_model->cars as $car) {
                     coordinates: [' . $car->lat . ', ' . $car->lon . ']
                 },
                 properties: {
-                    iconContent: "' . $car->model . ' - ' . $car->gnum . ', ' . $car->fuel . ' л."
+                    iconContent: "' . $car->model . ' - ' . $car->gnum . ', ' . $car->fuelAbs . ' / ' . $car->fuelmax . ' л."
                 }
             }, 
             {

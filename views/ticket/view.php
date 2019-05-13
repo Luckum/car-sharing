@@ -7,6 +7,7 @@ use yii\widgets\DetailView;
 use yii\bootstrap\Modal;
 use app\models\User;
 use app\models\Ticket;
+use app\models\Brigade;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Ticket */
@@ -65,10 +66,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
                 'format' => 'raw',
                 'visible' => $model->status == Ticket::STATUS_REJECTED,
             ],
-            [
-                'attribute' => 'car_id',
-                'value' => $car->model . ' - гос. номер ' . $car->number . ' / ' . $car->vin
-            ],
+            'carDetailsColumnHtmlFormatted:raw',
             'locationColumnHtmlFormatted:raw',
             [
                 'attribute' => 'rent_type',
@@ -151,10 +149,12 @@ $this->title = Yii::$app->name . ' | ' . $title;
             <?php ActiveForm::end(); ?>
         </div>
         <?php if ($model->status == Ticket::STATUS_COMMON || $model->status == Ticket::STATUS_ASAP): ?>
-            <?php if (!$model->brigade->isBusy): ?>
+            <?php if ($model->brigade->status == Brigade::STATUS_ONLINE): ?>
                 <?= Html::a('Принять заявку', ['/ticket/accept', 'id' => $model->id], ['class' => 'btn btn-success', 'id' => 'accept-btn']) ?>
             <?php endif; ?>
-            <?= Html::a('Отклонить', 'javascript:void(0)', ['class' => 'btn btn-warning', 'id' => 'reject-btn']) ?>
+            <?php if ($model->brigade->status != Brigade::STATUS_OFFLINE): ?>
+                <?= Html::a('Отклонить', 'javascript:void(0)', ['class' => 'btn btn-warning', 'id' => 'reject-btn']) ?>
+            <?php endif; ?>
         <?php endif; ?>
         <?= Html::a('Отправить', 'javascript:void(0)', ['class' => 'btn btn-warning', 'id' => 'send-reject-btn']) ?>
         <?= Html::a('Отмена', 'javascript:void(0)', ['class' => 'btn btn-default', 'id' => 'cancel-reject-btn']) ?>

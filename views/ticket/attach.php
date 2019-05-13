@@ -9,7 +9,7 @@ $title = 'Назначить заявку №' . $model->id;
 $this->title = Yii::$app->name . ' | ' . $title;
 
 $selected = null;
-$brigades = ArrayHelper::map(Brigade::find()->all(), 'id', 'descriptor');
+$brigades = ArrayHelper::map(Brigade::find()->where(['!=', 'status', Brigade::STATUS_OFFLINE])->all(), 'id', 'descriptor');
 ?>
 
 <div class="ticket-attach">
