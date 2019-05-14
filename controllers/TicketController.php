@@ -6,6 +6,7 @@ use Yii;
 use app\models\Ticket;
 use app\models\User;
 use app\models\Brigade;
+use app\models\BrigadeStatus;
 use app\modules\api\models\Car;
 
 use yii\data\ActiveDataProvider;
@@ -176,6 +177,7 @@ class TicketController extends BaseController
         if ($model->save()) {
             $model_brigade = Brigade::findOne(Yii::$app->user->identity->brigadeHasUser->brigade_id);
             $model_brigade->status = Brigade::STATUS_IN_WORK;
+            BrigadeStatus::changeStatus(Yii::$app->user->identity->brigadeHasUser->brigade_id, Brigade::STATUS_IN_WORK);
             if ($model_brigade->save()) {
                 Yii::$app->session->setFlash('success', 'Заявка принята в работу');
                 return $this->redirect(['view', 'id' => $id]);
@@ -195,6 +197,7 @@ class TicketController extends BaseController
                     if ($model->save()) {
                         $model_brigade = Brigade::findOne(Yii::$app->user->identity->brigadeHasUser->brigade_id);
                         $model_brigade->status = Brigade::STATUS_ONLINE;
+                        BrigadeStatus::changeStatus(Yii::$app->user->identity->brigadeHasUser->brigade_id, Brigade::STATUS_ONLINE);
                         if ($model_brigade->save()) {
                             Yii::$app->session->setFlash('success', 'Заявка завершена');
                         }

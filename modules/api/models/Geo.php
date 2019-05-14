@@ -37,16 +37,20 @@ class Geo extends Model
     {
         $this->lon = $lon;
         $ticket = Ticket::findOne($this->ticket_id);
-        $ticket->lon = $lon;
-        $ticket->save();
+        if ($ticket->status != Ticket::STATUS_COMPLETED) {
+            $ticket->lon = $lon;
+            $ticket->save();
+        }
     }
     
     public function setLat($lat)
     {
         $this->lat = $lat;
         $ticket = Ticket::findOne($this->ticket_id);
-        $ticket->lat = $lat;
-        $ticket->save();
+        if ($ticket->status != Ticket::STATUS_COMPLETED) {
+            $ticket->lat = $lat;
+            $ticket->save();
+        }
     }
     
     protected function setData($data)

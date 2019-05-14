@@ -6,6 +6,7 @@ use Yii;
 use app\models\Brigade;
 use app\models\BrigadeHasUser;
 use app\models\BrigadeHasArea;
+use app\models\BrigadeStatus;
 use app\models\User;
 use app\models\Ticket;
 use yii\data\ActiveDataProvider;
@@ -245,6 +246,8 @@ class BrigadeController extends BaseController
         $model->status = Brigade::STATUS_OFFLINE;
         $model->save();
         
+        BrigadeStatus::changeStatus($id, Brigade::STATUS_OFFLINE);
+        
         return $this->redirect(['index']);
     }
     
@@ -254,6 +257,8 @@ class BrigadeController extends BaseController
         $model->status = Brigade::STATUS_PAUSE;
         $model->save();
         
+        BrigadeStatus::changeStatus($id, Brigade::STATUS_PAUSE);
+        
         return $this->redirect(['index']);
     }
     
@@ -262,6 +267,8 @@ class BrigadeController extends BaseController
         $model = $this->findModel($id);
         $model->status = Brigade::STATUS_ONLINE;
         $model->save();
+        
+        BrigadeStatus::changeStatus($id, Brigade::STATUS_ONLINE);
         
         return $this->redirect(['index']);
     }

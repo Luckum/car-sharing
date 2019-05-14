@@ -60,4 +60,18 @@ class BrigadeStatus extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Brigade::className(), ['id' => 'brigade_id']);
     }
+    
+    public static function changeStatus($id, $status)
+    {
+        $model = self::find()->where(['brigade_id' => $id])->orderBy('started_at DESC')->one();
+        if ($model) {
+            $model->finished_at = date('Y-m-d H:i:s');
+            $model->save();
+        }
+        
+        $model = new BrigadeStatus;
+        $model->brigade_id = $id;
+        $model->status = $status;
+        $model->save();
+    }
 }
