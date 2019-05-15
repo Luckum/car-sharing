@@ -51,11 +51,14 @@ $this->title = Yii::$app->name . ' | ' . $title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{operator} {view} {update} {delete}',
+                'template' => '{operator} {api} {view} {update} {delete}',
                 'buttons' => [
                     'operator' => function ($url, $model, $key) {
                         return Html::a('<i class="fa fa-users"></i>', $url, ['title' => 'Операторы']);
-                    }
+                    },
+                    'api' => function ($url, $model, $key) {
+                        return Html::a('<i class="fa fa-link"></i>', $url, ['title' => 'Настройки API']);
+                    },
                 ],
             ],
         ],

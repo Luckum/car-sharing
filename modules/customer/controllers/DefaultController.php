@@ -8,6 +8,8 @@ use app\modules\customer\models\OperatorLoginForm;
 use app\modules\api\models\Car;
 use yii\data\ArrayDataProvider;
 
+use app\models\User;
+
 /**
  * Default controller for the `customer` module
  */
@@ -58,6 +60,31 @@ class DefaultController extends SiteController
         return $this->render('list', [
             //'cars_model' => $cars_model,
             'dataProvider' => $dataProvider
+        ]);
+    }
+    
+    public function actionAccess()
+    {
+        $model = User::findOne(Yii::$app->user->identity->id);
+        $model->scenario = 'update';
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if (!empty(Yii::$app->request->post('new_password'))) {
+                if (Yii::$app->request->post('new_password') == Yii::$app->request->post('new_password_repeat')) {
+                    $model->password = Yii::$app->getSecurity()->generatePasswordHash(Yii::$app->request->post('new_password'));
+                } else {
+                    Yii::$app->session->setFlash('error', 'Пароли не совпадают');
+                }
+            }
+            if ($model->save()) {
+                return $this->redirect(['/']);
+            }
+        }
+        
+        $model->password = null;
+        
+        return $this->render('access', [
+            'model' => $model,
         ]);
     }
 }

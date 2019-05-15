@@ -40,6 +40,8 @@ class Geo extends Model
         if ($ticket->status != Ticket::STATUS_COMPLETED) {
             $ticket->lon = $lon;
             $ticket->save();
+        } else {
+            $this->lon = $ticket->lon;
         }
     }
     
@@ -50,6 +52,8 @@ class Geo extends Model
         if ($ticket->status != Ticket::STATUS_COMPLETED) {
             $ticket->lat = $lat;
             $ticket->save();
+        } else {
+            $this->lat = $ticket->lat;
         }
     }
     

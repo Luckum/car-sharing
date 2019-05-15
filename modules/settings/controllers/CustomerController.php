@@ -6,6 +6,7 @@ use Yii;
 use app\models\Customer;
 use app\models\User;
 use app\models\CustomerHasUser;
+use app\models\CustomerApi;
 use yii\data\ActiveDataProvider;
 use app\controllers\BaseController;
 use app\helpers\ImageHelper;
@@ -237,5 +238,26 @@ class CustomerController extends BaseController
         $model_user->delete();
         
         return $this->redirect(['operator', 'id' => $id]);
+    }
+    
+    public function actionApi($id)
+    {
+        $model = CustomerApi::find()->where(['customer_id' => $id])->one();
+        if (!$model) {
+            $model = new CustomerApi;
+        }
+        $model_customer = $this->findModel($id);
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->customer_id = $id;
+            if ($model->save()) {
+                return $this->redirect(['index']);
+            }
+        }
+        
+        return $this->render('api', [
+            'model' => $model,
+            'model_customer' => $model_customer
+        ]);
     }
 }

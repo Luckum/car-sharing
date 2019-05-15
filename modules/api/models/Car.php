@@ -3,17 +3,31 @@
 namespace app\modules\api\models;
 
 use yii\base\Model;
+use Yii;
+
+use app\models\CustomerApi;
 
 class Car extends Model
 {
-    protected $session = 'session_id=1a17ffe1-9146-4f75-9b09-23d7f93a52aa';
-    protected $source = 'http://car5.ru/car5/api/cars';
+    protected $session = '';
+    protected $source = '';
     protected $cars;
     protected $car;
     protected $car_id = '';
     
+    protected function setParams()
+    {
+        $api = CustomerApi::find()->where(['customer_id' => Yii::$app->params['model_car_customer']])->one();
+        if ($api) {
+            $this->source = $api->api_url;
+            $this->session = $api->api_url_params;
+        }
+    }
+    
     public function getData()
     {
+        $this->setParams();
+        
         $url = empty($this->car_id) ? $this->source . '?' . $this->session : $this->source . '/' . $this->car_id . '/?' . $this->session;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);

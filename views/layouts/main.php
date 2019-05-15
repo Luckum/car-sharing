@@ -94,6 +94,9 @@ if (Yii::$app->getSession()->getAllFlashes()) {
                 <?php endif; ?>
                 <?= Html::a('Сформировать отчёт', 'javascript:void();', ['class' => 'btn btn-default']) ?>
             <?php endif; ?>
+            <?php if (Yii::$app->user->identity->role == User::ROLE_OPERATOR): ?>
+                <?= Html::a('Сменить логин/пароль', ['/access'], ['class' => 'btn btn-default']) ?>
+            <?php endif; ?>
             <?php if (Yii::$app->user->identity->role == User::ROLE_BRIGADIER): ?>
                 <?= Html::a('Позвонить в офис', 'javascript:void();', ['class' => 'btn btn-default']) ?>
                 <?php if (Yii::$app->user->identity->brigadeHasUser->brigade->status == Brigade::STATUS_ONLINE): ?>
