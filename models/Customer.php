@@ -72,6 +72,15 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCustomerApi()
+    {
+        return $this->hasOne(CustomerApi::className(), ['customer_id' => 'id']);
+    }
+
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCustomerHasUsers()
     {
         return $this->hasMany(CustomerHasUser::className(), ['customer_id' => 'id']);

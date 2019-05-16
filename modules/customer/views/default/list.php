@@ -5,6 +5,8 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
 
+use app\modules\api\models\Car;
+
 $this->title = 'Компания каршеринга ' . Yii::$app->user->identity->customerHasUser->customer->title . ' | Панель управления';
 ?>
 
@@ -89,7 +91,8 @@ $this->title = 'Компания каршеринга ' . Yii::$app->user->ident
                     'headerOptions' => ['width' => '9%'],
                     'contentOptions' => ['width' => '9%'],
                     'content' => function ($data) {
-                        return $data->status;
+                        $car_loc = Car::instance();
+                        return $car_loc->getStatusRu($data->status);
                     }
                 ],
                 [

@@ -22,7 +22,11 @@ class DefaultController extends SiteController
     public function actionIndex()
     {
         $cars_model = new Car();
-        $cars_model->getData();
+        
+        if (!$cars_model->getData()) {
+            $cars_model = [];
+            Yii::$app->session->setFlash('error', 'Не настроен доступ к АПИ компании ' . Yii::$app->user->identity->customerHasUser->customer->title . '!');
+        }
         
         return $this->render('index', [
             'cars_model' => $cars_model

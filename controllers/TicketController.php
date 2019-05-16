@@ -7,6 +7,7 @@ use app\models\Ticket;
 use app\models\User;
 use app\models\Brigade;
 use app\models\BrigadeStatus;
+use app\models\Customer;
 use app\modules\api\models\Car;
 
 use yii\data\ActiveDataProvider;
@@ -40,7 +41,7 @@ class TicketController extends BaseController
      */
     public function actionIndex($status = '')
     {
-        $query = Ticket::find();
+        $query = Ticket::find()->joinWith('customer')->joinWith('customer.customerApi');
         
         if (!empty($status)) {
             if ($status == 'new') {
@@ -92,11 +93,21 @@ class TicketController extends BaseController
                 )]);
         }
         
+        $query->andWhere(['not', ['customer_api.id' => null]]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => false
         ]);
-
+        
+        $customers = Customer::find()->all();
+        if ($customers) {
+            foreach ($customers as $customer) {
+                if (!$customer->customerApi) {
+                    Yii::$app->session->addFlash('error', 'Не настроен доступ к АПИ компании ' . $customer->title . '!');
+                }
+            }
+        }
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'status' => $status,

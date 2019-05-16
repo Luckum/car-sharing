@@ -38,12 +38,16 @@ if (Yii::$app->getSession()->getAllFlashes()) {
     <div class="header">
         <?php if (!empty(Yii::$app->user->identity->avatar)): ?>
             <div class="user-avatar pull-left">
-                <?= Html::img('/uploads/avatars/' . Yii::$app->user->identity->avatar) ?>
+                <a href="<?= Url::to(['/']) ?>">
+                    <?= Html::img('/uploads/avatars/' . Yii::$app->user->identity->avatar) ?>
+                </a>
             </div>
         <?php endif; ?>
         <?php if (!empty(Yii::$app->user->identity->customerHasUser->customer->logo)): ?>
             <div class="user-avatar pull-left">
-                <?= Html::img('/uploads/logos/' . Yii::$app->user->identity->customerHasUser->customer->logo) ?>
+                <a href="<?= Url::to(['/']) ?>">
+                    <?= Html::img('/uploads/logos/' . Yii::$app->user->identity->customerHasUser->customer->logo) ?>
+                </a>
             </div>
         <?php endif; ?>
         
