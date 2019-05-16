@@ -55,9 +55,9 @@ class TicketController extends BaseController
         if (Yii::$app->user->identity->role == User::ROLE_BRIGADIER) {
             $tickets = Ticket::getTicketsForBrigade(Yii::$app->user->identity->brigadeHasUser->brigade_id);
             if (!empty($status)) {
-                $query->andWhere(['id' => $tickets]);
+                $query->andWhere(['ticket.id' => $tickets]);
             } else {
-                $query->where(['id' => $tickets]);
+                $query->where(['ticket.id' => $tickets]);
             }
             
         }
@@ -66,7 +66,7 @@ class TicketController extends BaseController
         switch ($sort_order) {
             case 'urgency':
                 $query->orderBy([new \yii\db\Expression(
-                    'FIELD(status, ' . 
+                    'FIELD(ticket.status, ' . 
                     Ticket::STATUS_ASAP . ', ' . 
                     Ticket::STATUS_COMMON . ', ' . 
                     Ticket::STATUS_COMPLETED . ', ' . 
@@ -76,14 +76,14 @@ class TicketController extends BaseController
                 )]);
             break;
             case 'date':
-                $query->orderBy('created_at DESC');
+                $query->orderBy('ticket.created_at DESC');
             break;
             case 'address':
                 
             break;
             default:
                 $query->orderBy([new \yii\db\Expression(
-                    'FIELD(status, ' . 
+                    'FIELD(ticket.status, ' . 
                     Ticket::STATUS_ASAP . ', ' . 
                     Ticket::STATUS_COMMON . ', ' . 
                     Ticket::STATUS_COMPLETED . ', ' . 
