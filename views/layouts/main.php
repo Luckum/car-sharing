@@ -84,7 +84,7 @@ if (Yii::$app->getSession()->getAllFlashes()) {
                 ]); ?>
             <?php endif; ?>
             <?php if (Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_MANAGER): ?>
-                <?= Html::a('Фотографии', 'javascript:void();', ['class' => 'btn btn-default']) ?>
+                <?= Html::a('Фотографии', ['/photo/index'], ['class' => 'btn btn-default']) ?>
             <?php endif; ?>
             <?php if (Yii::$app->user->identity->role !== User::ROLE_BRIGADIER && Yii::$app->user->identity->role !== User::ROLE_WORKER): ?>
                 <?php if (Yii::$app->controller->id != 'ticket'): ?>

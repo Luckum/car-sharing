@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Ticket;
+use app\models\TicketPhoto;
 use app\models\User;
 use app\models\Brigade;
 use app\models\BrigadeStatus;
@@ -13,7 +14,9 @@ use app\modules\api\models\Car;
 use yii\data\ActiveDataProvider;
 use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
+use app\helpers\ImageHelper;
 
 /**
  * TicketController implements the CRUD actions for Ticket model.
@@ -126,6 +129,7 @@ class TicketController extends BaseController
         
         return $this->render('view', [
             'model' => $model,
+            'model_photo' => new TicketPhoto,
         ]);
     }
 
@@ -206,6 +210,38 @@ class TicketController extends BaseController
                     $model->status = Ticket::STATUS_COMPLETED;
                     $model->finished_at = date('Y-m-d H:i:s');
                     if ($model->save()) {
+                        $model_ticket_photo = new TicketPhoto;
+                        $ticket_photos = UploadedFile::getInstances($model_ticket_photo, 'photo_file');
+                        if ($ticket_photos) {
+                            foreach ($ticket_photos as $file) {
+                                $car = new Car();
+                                $car->carId = $model->car_id;
+                                $car->getData();
+                                $time = new \DateTime();
+                                
+                                $f_name = str_replace(' ', '', $car->number) . '_' . $time->format('Hisu') . '.' . $file->extension;
+                                $customer = $model->customer->subdomain;
+                                $date = date('Y-m-d');
+                                
+                                if (!file_exists(Yii::getAlias('@webroot') . '/uploads/photos/' . $customer)) {
+                                    mkdir(Yii::getAlias('@webroot') . '/uploads/photos/' . $customer);
+                                }
+                                
+                                if (!file_exists(Yii::getAlias('@webroot') . '/uploads/photos/' . $customer . '/' . $date)) {
+                                    mkdir(Yii::getAlias('@webroot') . '/uploads/photos/' . $customer . '/' . $date);
+                                }
+                                
+                                $file->saveAs('uploads/photos/' . $customer . '/' . $date . '/' . $f_name);
+                                $model_ticket_photo = new TicketPhoto;
+                                $model_ticket_photo->path = $customer . '/' . $date . '/' . $f_name;
+                                $model_ticket_photo->photo_file = null;
+                                ImageHelper::imageResize(Yii::getAlias('@webroot') . '/uploads/photos/' . $model_ticket_photo->path, Yii::getAlias('@webroot') . '/uploads/photos/' . $model_ticket_photo->path, 1024, 1024);
+                                
+                                $model_ticket_photo->ticket_id = $id;
+                                $model_ticket_photo->save();
+                            }
+                        }
+                        
                         $model_brigade = Brigade::findOne(Yii::$app->user->identity->brigadeHasUser->brigade_id);
                         $model_brigade->status = Brigade::STATUS_ONLINE;
                         BrigadeStatus::changeStatus(Yii::$app->user->identity->brigadeHasUser->brigade_id, Brigade::STATUS_ONLINE);

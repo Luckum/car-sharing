@@ -8,6 +8,7 @@ use yii\bootstrap\Modal;
 use app\models\User;
 use app\models\Ticket;
 use app\models\Brigade;
+use kartik\file\FileInput;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Ticket */
@@ -149,28 +150,45 @@ $this->title = Yii::$app->name . ' | ' . $title;
             <?php ActiveForm::end(); ?>
         </div>
         <?php if ($model->status == Ticket::STATUS_COMMON || $model->status == Ticket::STATUS_ASAP): ?>
-            <?php if ($model->brigade->status == Brigade::STATUS_ONLINE): ?>
+            <?php if (Yii::$app->user->identity->brigadeHasUser->brigade->status == Brigade::STATUS_ONLINE): ?>
                 <?= Html::a('Принять заявку', ['/ticket/accept', 'id' => $model->id], ['class' => 'btn btn-success', 'id' => 'accept-btn']) ?>
             <?php endif; ?>
-            <?php if ($model->brigade->status != Brigade::STATUS_OFFLINE): ?>
+            <?php if (Yii::$app->user->identity->brigadeHasUser->brigade->status != Brigade::STATUS_OFFLINE): ?>
                 <?= Html::a('Отклонить', 'javascript:void(0)', ['class' => 'btn btn-warning', 'id' => 'reject-btn']) ?>
             <?php endif; ?>
         <?php endif; ?>
         <?= Html::a('Отправить', 'javascript:void(0)', ['class' => 'btn btn-warning', 'id' => 'send-reject-btn']) ?>
         <?= Html::a('Отмена', 'javascript:void(0)', ['class' => 'btn btn-default', 'id' => 'cancel-reject-btn']) ?>
         <?php if ($model->status == Ticket::STATUS_IN_WORK): ?>
+            <?php $form = ActiveForm::begin(['id' => 'close-ticket-frm', 'action' => Url::to(['/ticket/close', 'id' => $model->id]), 'options' => ['enctype' => 'multipart/form-data']]); ?>
+        
+                <?= $form->field($model, 'milage')->hiddenInput()->label(false) ?>
+                
+                <?= $form->field($model, 'fuel')->hiddenInput()->label(false) ?>
+                
+            
+                <div class="ticket-photo-upload">
+                    <?= $form->field($model_photo, 'photo_file[]')->widget(FileInput::classname(), [
+                        'language' => 'ru',
+                        'options' => [
+                            'multiple' => true,
+                            'accept' => 'image/*'
+                        ],
+                        'pluginOptions' => [
+                            'maxFileCount' => 10,
+                            'showRemove' => true,
+                            'showUpload' => false
+                        ]
+                    ]); ?>
+                </div>
+            <?php ActiveForm::end(); ?>
+            
             <?= Html::a('Разблокировать авто', 'javascript:void(0)', ['class' => 'btn btn-danger', 'id' => 'unblock-auto-btn']) ?>
             <?= Html::a('Завершить заявку', 'javascript:void(0)', ['class' => 'btn btn-success', 'id' => 'close-ticket-btn']) ?>
         <?php endif; ?>
     <?php endif; ?>
     
-    <?php $form = ActiveForm::begin(['id' => 'close-ticket-frm', 'action' => Url::to(['/ticket/close', 'id' => $model->id])]); ?>
-        
-        <?= $form->field($model, 'milage')->hiddenInput()->label(false) ?>
-        
-        <?= $form->field($model, 'fuel')->hiddenInput()->label(false) ?>
-        
-    <?php ActiveForm::end(); ?>
+    
 </p>
 
 <?php $script = <<<JS

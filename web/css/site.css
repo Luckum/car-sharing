@@ -254,3 +254,13 @@ table.table > tbody > tr.tr-completed {
 #reject-comment-container {
 	display: none;
 }
+
+.ticket-photo-upload {
+	margin-bottom: 20px;
+}
+.photo-index {
+	height: 550px;
+}
+.photo-index > div {
+	height: 100%
+}

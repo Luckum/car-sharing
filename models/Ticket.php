@@ -134,6 +134,14 @@ class Ticket extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTicketPhotos()
+    {
+        return $this->hasMany(TicketPhoto::className(), ['ticket_id' => 'id']);
+    }
     
     public function getCreateStatuses()
     {

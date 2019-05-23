@@ -25,7 +25,8 @@ class BaseController extends Controller
                 'view',
                 'reject',
                 'accept',
-                'close'
+                'close',
+                'photo-upload',
             ],
             'site' => [
                 'logout',
@@ -64,6 +65,9 @@ class BaseController extends Controller
             ],
             'user-profile' => [
                 'create'
+            ],
+            'photo' => [
+                'index'
             ],
         ]
     ];

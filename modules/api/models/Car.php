@@ -152,4 +152,9 @@ class Car extends Model
     {
         return $this->statusRu[$status];
     }
+    
+    public function getStatus()
+    {
+        return $this->statusRu[$this->car->cars[0]->status];
+    }
 }
