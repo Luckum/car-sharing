@@ -28,7 +28,7 @@ if ($cars_model) {
                         coordinates: [' . $car->lat . ', ' . $car->lon . ']
                     },
                     properties: {
-                        iconContent: "' . $car->model . ' - ' . $car->gnum . ', ' . $car->fuelAbs . ' / ' . $car->fuelmax . ' л., ' . $car_loc->getStatusRu($car->status) . '"
+                        iconContent: "' . $car->model . ' - ' . $car->gnum . ', ' . round($car->fuel, 2) . '%, ' . $car_loc->getStatusRu($car->status) . '"
                     }
                 }, 
                 {

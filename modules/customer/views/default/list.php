@@ -71,11 +71,11 @@ $this->title = 'Компания каршеринга ' . Yii::$app->user->ident
                     }
                 ],
                 [
-                    'label' => 'Топливо, л.',
+                    'label' => 'Топливо',
                     'headerOptions' => ['width' => '7%'],
                     'contentOptions' => ['width' => '7%'],
                     'content' => function ($data) {
-                        return $data->fuelAbs . ' / ' . $data->fuelmax;
+                        return $data->fuelAbs . ' / ' . $data->fuelmax . ' (' . round($data->fuel, 2) . '%)';
                     }
                 ],
                 [

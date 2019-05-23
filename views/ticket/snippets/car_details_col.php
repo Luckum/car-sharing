@@ -15,6 +15,6 @@ IMEI: <?= $car->imei ?>
 <br />
 пробег: <?= $car->mileage ?> км.
 <br />
-топливо: <?= $car->fuelAbs ?> / <?= $car->fuelmax ?> л.
+топливо: <?= round($car->fuel, 2) ?>%
 <br />
 статус: <?= $car->status ?>
