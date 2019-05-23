@@ -18,6 +18,10 @@ if (!$model->isNewRecord) {
         $jobs_selected = ArrayHelper::merge($jobs_selected, [$job->job_type_id => ['selected' => true]]);
     }
 }
+
+if ($model->isNewRecord && !empty($car_id)) {
+    $model->car_id = $car_id;
+}
 ?>
 
 <div class="ticket-form">
@@ -30,7 +34,7 @@ if (!$model->isNewRecord) {
         'pluginOptions' => [
             'allowClear' => true
         ],
-        'disabled' => !$model->isNewRecord
+        'disabled' => !$model->isNewRecord || !empty($car_id)
     ]) ?>
     
     <?= $form->field($model, 'status')->dropDownList($model->createStatuses) ?>

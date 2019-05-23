@@ -6,6 +6,7 @@ use Yii;
 use app\controllers\SiteController;
 use app\modules\customer\models\OperatorLoginForm;
 use app\modules\api\models\Car;
+use app\modules\api\models\Geo;
 use yii\data\ArrayDataProvider;
 
 use app\models\User;
@@ -56,6 +57,17 @@ class DefaultController extends SiteController
     {
         $cars_model = new Car();
         $cars_model->getData();
+        
+        /*$cities = [];
+        foreach ($cars_model->cars as $car) {
+            $location = new Geo;
+            $location->lon = $car->lon;
+            $location->lat = $car->lat;
+            $location->getData();
+            $cities[] = $location->city;
+        }
+        
+        print_r($cities);*/
         
         $dataProvider = new ArrayDataProvider([
             'allModels' => $cars_model->cars

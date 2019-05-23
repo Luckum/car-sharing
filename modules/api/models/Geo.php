@@ -14,6 +14,7 @@ class Geo extends Model
     protected $ticket_id;
     protected $address_text;
     protected $zip;
+    protected $city;
     
     public function getData()
     {
@@ -36,24 +37,28 @@ class Geo extends Model
     public function setLon($lon)
     {
         $this->lon = $lon;
-        $ticket = Ticket::findOne($this->ticket_id);
-        if ($ticket->status != Ticket::STATUS_COMPLETED) {
-            $ticket->lon = $lon;
-            $ticket->save();
-        } else {
-            $this->lon = $ticket->lon;
+        if (!empty($this->ticket_id)) {
+            $ticket = Ticket::findOne($this->ticket_id);
+            if ($ticket->status != Ticket::STATUS_COMPLETED) {
+                $ticket->lon = $lon;
+                $ticket->save();
+            } else {
+                $this->lon = $ticket->lon;
+            }
         }
     }
     
     public function setLat($lat)
     {
         $this->lat = $lat;
-        $ticket = Ticket::findOne($this->ticket_id);
-        if ($ticket->status != Ticket::STATUS_COMPLETED) {
-            $ticket->lat = $lat;
-            $ticket->save();
-        } else {
-            $this->lat = $ticket->lat;
+        if (!empty($this->ticket_id)) {
+            $ticket = Ticket::findOne($this->ticket_id);
+            if ($ticket->status != Ticket::STATUS_COMPLETED) {
+                $ticket->lat = $lat;
+                $ticket->save();
+            } else {
+                $this->lat = $ticket->lat;
+            }
         }
     }
     
@@ -62,6 +67,11 @@ class Geo extends Model
         $xml = simplexml_load_string($data);
         $this->address_text = $xml->GeoObjectCollection->featureMember[0]->GeoObject->metaDataProperty->GeocoderMetaData->Address->formatted;
         $this->zip = $xml->GeoObjectCollection->featureMember[0]->GeoObject->metaDataProperty->GeocoderMetaData->Address->postal_code;
+        foreach ($xml->GeoObjectCollection->featureMember[0]->GeoObject->metaDataProperty->GeocoderMetaData->Address->Component as $component) {
+            if ($component->kind == 'locality') {
+                $this->city = strval($component->name);
+            }
+        }
     }
     
     public function getAddress()
@@ -72,5 +82,10 @@ class Geo extends Model
     public function getZip()
     {
         return $this->zip;
+    }
+    
+    public function getCity()
+    {
+        return $this->city;
     }
 }

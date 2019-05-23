@@ -18,6 +18,7 @@ $this->title = Yii::$app->name . ' | ' . $title;
         'model' => $model,
         'cars_model' => $cars_model,
         'ticket_has_job_model' => $ticket_has_job_model,
+        'car_id' => $car_id,
     ]) ?>
 
 </div>

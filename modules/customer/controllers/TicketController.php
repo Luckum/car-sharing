@@ -79,7 +79,7 @@ class TicketController extends \app\controllers\TicketController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($car_id = '')
     {
         $cars_model = new Car();
         $cars_model->getData();
@@ -113,6 +113,7 @@ class TicketController extends \app\controllers\TicketController
             'model' => $model,
             'cars_model' => $cars_model,
             'ticket_has_job_model' => $ticket_has_job_model,
+            'car_id' => $car_id,
         ]);
     }
     

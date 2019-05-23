@@ -20,21 +20,22 @@ if ($cars_model) {
                 zoom: 13
             });';
     foreach ($cars_model->cars as $car) {
-        $script .= '
+        $script .= "
             myMap.geoObjects.add(new ymaps.GeoObject(
                 {
                     geometry: {
-                        type: "Point",
-                        coordinates: [' . $car->lat . ', ' . $car->lon . ']
+                        type: 'Point',
+                        coordinates: [" . $car->lat . ", " . $car->lon . "]
                     },
                     properties: {
-                        iconContent: "' . $car->model . ' - ' . $car->gnum . ', ' . round($car->fuel, 2) . '%, ' . $car_loc->getStatusRu($car->status) . '"
+                        iconContent: '" . $car->model . " - " . $car->gnum . ", " . round($car->fuel, 2) . "%, " . $car_loc->getStatusRu($car->status) . "',
+                        balloonContent: '" . Html::a('создать заявку', ['/ticket/create', 'car_id' => $car->car_id]) . "'
                     }
                 }, 
                 {
-                    preset: "islands#redStretchyIcon"
+                    preset: 'islands#redStretchyIcon'
                 }
-            ));';
+            ));";
     }
     $script .= '        
         }
@@ -49,6 +50,8 @@ $this->title = 'Компания каршеринга ' . Yii::$app->user->ident
         <div class="customer-index-buttons">
             <?= Html::a('Список', Url::to(['/list']), ['class' => 'btn btn-default']) ?>
         </div>
+        <br />
+        <p>При клике на метку вы можете создать заявку</p>
         <div id="map-container" style="width: 100%; height: 640px; margin-top: 25px;"></div>
     <?php endif; ?>
 </div>
