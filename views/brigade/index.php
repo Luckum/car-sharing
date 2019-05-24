@@ -114,11 +114,19 @@ $sort_items = [
                         'contentOptions' => ['width' => '20%']
                     ],
                     [
+                        'label' => 'KPI',
+                        'headerOptions' => ['width' => '7%'],
+                        'contentOptions' => ['width' => '7%'],
+                        'content' => function ($data) {
+                            return $data->brigadeKpi;
+                        }
+                    ],
+                    [
                         'attribute' => 'buttonsColumnHtmlFormatted',
                         'format' => 'raw',
                         'label' => 'Действия',
-                        'headerOptions' => ['width' => '18%'],
-                        'contentOptions' => ['width' => '18%']
+                        'headerOptions' => ['width' => '11%'],
+                        'contentOptions' => ['width' => '11%']
                     ]
                     
                 ],

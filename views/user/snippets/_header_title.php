@@ -16,7 +16,7 @@ switch ($model->role):
     case User::ROLE_BRIGADIER:
         if (isset($model->brigadeHasUser)):
 ?>
-            <div>Бригада: <?= $model->brigadeHasUser->brigade->title ?> - <?= Html::a('состав бригады', 'javascript:void(0)') ?></div>
+            <div>Бригада: <?= $model->brigadeHasUser->brigade->title ?> - <?= Html::a('состав бригады', ['/brigade/view', 'id' => $model->brigadeHasUser->brigade->id]) ?></div>
 <?php
         endif;
 ?>
@@ -40,7 +40,7 @@ switch ($model->role):
     case User::ROLE_WORKER:
         if (isset($model->brigadeHasUser)):
 ?>
-            <div>Бригада: <?= $model->brigadeHasUser->brigade->title ?> - <?= Html::a('состав бригады', 'javascript:void(0)') ?></div>
+            <div>Бригада: <?= $model->brigadeHasUser->brigade->title ?> - <?= Html::a('состав бригады', ['/brigade/view', 'id' => $model->brigadeHasUser->brigade->id]) ?></div>
 <?php
         endif;
 ?>

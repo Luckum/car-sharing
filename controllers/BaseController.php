@@ -19,6 +19,7 @@ class BaseController extends Controller
                 'set-pause',
                 'set-online',
                 'set-offline',
+                'view'
             ],
             'ticket' => [
                 'index',
@@ -79,6 +80,9 @@ class BaseController extends Controller
             ],
             'site' => [
                 'logout',
+            ],
+            'brigade' => [
+                'view',
             ]
         ]
     ];

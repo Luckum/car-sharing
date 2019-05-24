@@ -127,6 +127,27 @@ class Brigade extends \yii\db\ActiveRecord
             ->count();
     }
     
+    public function getDelayedTotal()
+    {
+        return Ticket::find()
+            ->where(['brigade_id' => $this->id, 'status' => Ticket::STATUS_DELAYED])
+            ->count();
+    }
+    
+    public function getRejectedTotal()
+    {
+        return Ticket::find()
+            ->where(['brigade_id' => $this->id, 'status' => Ticket::STATUS_REJECTED])
+            ->count();
+    }
+    
+    public function getTicketsTotal()
+    {
+        return Ticket::find()
+            ->where(['brigade_id' => $this->id])
+            ->count();
+    }
+    
     public function getTeamColumnHtmlFormatted()
     {
         return Yii::$app->view->renderFile('@app/views/brigade/snippets/team_col.php', [
@@ -224,5 +245,15 @@ class Brigade extends \yii\db\ActiveRecord
             return $ticket;
         }
         return false;
+    }
+    
+    public function getBrigadeKpi()
+    {
+        $kpi = 0;
+        if ($this->ticketsTotal > 0) {
+            $kpi = round(($this->completedTotal - $this->delayedTotal - $this->rejectedTotal) / $this->ticketsTotal, 2);
+        }
+        
+        return $kpi;
     }
 }

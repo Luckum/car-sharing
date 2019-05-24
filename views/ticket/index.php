@@ -100,8 +100,17 @@ $sort_items = [
                         [
                             'attribute' => 'created_at',
                             'format' => 'date',
-                            'headerOptions' => ['width' => '15%'],
-                            'contentOptions' => ['width' => '15%']
+                            'headerOptions' => ['width' => '13%'],
+                            'contentOptions' => ['width' => '13%']
+                        ],
+                        [
+                            'attribute' => 'customer_id',
+                            'headerOptions' => ['width' => '11%'],
+                            'contentOptions' => ['width' => '11%'],
+                            'content' => function ($data) {
+                                return $data->customer->title;
+                            },
+                            'visible' => Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_MANAGER,
                         ],
                         [
                             'attribute' => 'status',
@@ -125,13 +134,13 @@ $sort_items = [
                         [
                             'attribute' => 'locationColumnHtmlFormatted',
                             'format' => 'raw',
-                            'headerOptions' => ['width' => '20%'],
-                            'contentOptions' => ['width' => '20%']
+                            'headerOptions' => ['width' => '18%'],
+                            'contentOptions' => ['width' => '18%']
                         ],
                         [
                             'attribute' => 'rent_type',
-                            'headerOptions' => ['width' => '20%'],
-                            'contentOptions' => ['width' => '20%'],
+                            'headerOptions' => ['width' => '15%'],
+                            'contentOptions' => ['width' => '15%'],
                             'content' => function ($data) {
                                 return $data->rentType;
                             }
@@ -139,8 +148,8 @@ $sort_items = [
                         [
                             'attribute' => 'jobsColumnHtmlFormatted',
                             'format' => 'raw',
-                            'headerOptions' => ['width' => '18%'],
-                            'contentOptions' => ['width' => '18%']
+                            'headerOptions' => ['width' => '16%'],
+                            'contentOptions' => ['width' => '16%']
                         ],
                     ],
                 ]); ?>

@@ -52,6 +52,11 @@ $this->title = Yii::$app->name . ' | ' . $title;
             'id',
             'created_at:date',
             [
+                'attribute' => 'customer_id',
+                'value' => $model->customer->title,
+                'visible' => Yii::$app->user->identity->role == User::ROLE_ADMIN || Yii::$app->user->identity->role == User::ROLE_MANAGER,
+            ],
+            [
                 'attribute' => 'status',
                 'value' => $model->status == Ticket::STATUS_ASAP ? '<span style="color: red;">' . $model->statusRu . '</span>' : $model->statusRu,
                 'format' => 'raw',
