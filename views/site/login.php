@@ -6,6 +6,7 @@
 use yii\helpers\Html;
 use app\assets\AppAsset;
 use yii\bootstrap\ActiveForm;
+use app\widgets\Alert;
 $this->title = Yii::$app->name;
 
 AppAsset::register($this);
@@ -25,6 +26,9 @@ AppAsset::register($this);
 
 <div class="login-box">
     <div class="login-box-body">
+        <div id="system-messages" style="opacity: 1;">
+            <?= Alert::widget() ?>
+        </div>
         <div class="login-logo">
             <?= Yii::$app->name ?>
         </div>
@@ -46,8 +50,9 @@ AppAsset::register($this);
                     ->label(false)
                     ->passwordInput(['placeholder' => 'Пароль'])
             ?>
-
+            
             <div class="form-group text-right">
+                <?= Html::a('Забыли пароль?', ['site/password-reset'], ['style' => 'float: left;']) ?>.
                 <?= Html::submitButton('Войти', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
             </div>
 

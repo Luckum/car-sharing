@@ -60,6 +60,7 @@ $config = [
                 'http://<subdomain:\w+>.' . $host . '/<controller:\w+>' => 'customer/<controller>',
                 'http://<subdomain:\w+>.' . $host . '/<controller:\w+>/<action:\w+>' => 'customer/<controller>/<action>',
                 '<action:\w+>' => 'site/<action>',
+                'password-reset' => 'site/password-reset',
                 
                  
             ],

@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\PasswordResetRequestForm;
 use app\models\User;
 
 class SiteController extends BaseController
@@ -107,5 +108,42 @@ class SiteController extends BaseController
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+    
+    public function actionPasswordReset()
+    {
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $new_password = substr(md5(time()), 10, 8);
+            $user = User::findOne([
+                'active' => User::STATUS_ACTIVE,
+                'email' => $model->email,
+            ]);
+            
+            if ($user) {
+                $user->password = Yii::$app->getSecurity()->generatePasswordHash($new_password);
+                if ($user->save()) {
+                    Yii::$app->mailer
+                        ->compose(
+                            ['html' => 'passwordReset-html', 'text' => 'passwordReset-text'],
+                            ['user' => $user, 'password' => $new_password]
+                        )
+                        ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+                        ->setTo($model->email)
+                        ->setSubject('Восстановление доступа к ' . Yii::$app->name)
+                        ->send();
+                        
+                    Yii::$app->session->setFlash('success', 'На указанный email было выслано письмо с новым паролем.');
+
+                    return $this->goHome();
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'Извините, мы не можем восстановить пароль для указанного email');
+            }
+        }
+
+        return $this->renderPartial('requestPasswordResetToken', [
+            'model' => $model,
+        ]);
     }
 }

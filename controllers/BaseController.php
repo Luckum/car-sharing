@@ -12,6 +12,7 @@ class BaseController extends Controller
 {
     public $publicActions = [
         'login',
+        'password-reset'
     ];
     public $brigadierActions = [
         'basic' => [
