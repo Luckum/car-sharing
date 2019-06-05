@@ -31,7 +31,7 @@ AppAsset::register($this);
         <p class="login-box-msg">Восстановление доступа</p>
         <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>
 
-            <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
+            <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Введите email, указанный при регистрации в системе') ?>
 
             <div class="form-group">
                 <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>

@@ -52,7 +52,7 @@ AppAsset::register($this);
             ?>
             
             <div class="form-group text-right">
-                <?= Html::a('Забыли пароль?', ['site/password-reset'], ['style' => 'float: left;']) ?>.
+                <?= Html::a('Забыли пароль?', ['/site/password-reset'], ['style' => 'float: left;']) ?>.
                 <?= Html::submitButton('Войти', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
             </div>
 
