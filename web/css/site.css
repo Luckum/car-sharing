@@ -264,3 +264,6 @@ table.table > tbody > tr.tr-completed {
 .photo-index > div {
 	height: 100%
 }
+.site-index-buttons .pull-right div {
+	display: inline-block;
+}

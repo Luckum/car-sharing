@@ -55,12 +55,11 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'http://<subdomain:\w+>.' . $host => 'customer',
-                'http://<subdomain:\w+>.' . $host . '/<action:\w+>' => 'customer/default/<action>',
-                'http://<subdomain:\w+>.' . $host . '/<controller:\w+>' => 'customer/<controller>',
-                'http://<subdomain:\w+>.' . $host . '/<controller:\w+>/<action:\w+>' => 'customer/<controller>/<action>',
-                '<action:\w+>' => 'site/<action>',
-                'password-reset' => 'site/password-reset',
+                'http://<subdomain:[\w\-]+>.' . $host => 'customer',
+                'http://<subdomain:[\w\-]+>.' . $host . '/<action:[\w\-]+>' => 'customer/default/<action>',
+                'http://<subdomain:[\w\-]+>.' . $host . '/<controller:[\w\-]+>' => 'customer/<controller>',
+                'http://<subdomain:[\w\-]+>.' . $host . '/<controller:[\w\-]+>/<action:[\w\-]+>' => 'customer/<controller>/<action>',
+                '<action:[\w\-]+>' => 'site/<action>',
                 
                  
             ],

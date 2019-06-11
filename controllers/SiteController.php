@@ -11,6 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\PasswordResetRequestForm;
 use app\models\User;
+use app\models\Ticket;
 
 class SiteController extends BaseController
 {
@@ -67,6 +68,51 @@ class SiteController extends BaseController
         if (Yii::$app->user->identity->role == User::ROLE_MANAGER) {
             $query->andWhere(['!=', 'role', User::ROLE_MANAGER]);
         }
+        
+        $sort_order = Yii::$app->request->post('sort');
+        $filter = Yii::$app->request->post('filter');
+        switch ($sort_order) {
+            case 'date':
+                $query->orderBy('user.created_at DESC');
+            break;
+            case 'day':
+                $date = date("Y-m-d");
+                $sub_query = Ticket::find()
+                    ->select('brigade_id, count(brigade_id) as b_cnt')
+                    ->where(['status' => Ticket::STATUS_COMPLETED])
+                    ->andWhere("DATE_FORMAT(finished_at, '%Y-%m-%d') = '$date'")
+                    ->groupBy('brigade_id');
+                
+                $query->joinWith('brigadeHasUser');
+                $query->leftJoin(['dayCnt' => $sub_query], 'dayCnt.brigade_id = brigade_has_user.brigade_id');
+                $query->orderBy('dayCnt.b_cnt DESC'); 
+            break;
+            case 'total':
+                $sub_query = Ticket::find()
+                    ->select('brigade_id, count(brigade_id) as b_cnt')
+                    ->where(['status' => Ticket::STATUS_COMPLETED])
+                    ->groupBy('brigade_id');
+                
+                $query->joinWith('brigadeHasUser');
+                $query->leftJoin(['totalCnt' => $sub_query], 'totalCnt.brigade_id = brigade_has_user.brigade_id');
+                $query->orderBy('totalCnt.b_cnt DESC');
+            break;
+            default:
+                $query->orderBy('user.created_at DESC');
+        }
+        
+        switch ($filter) {
+            case User::ROLE_WORKER:
+                $query->andWhere(['role' => User::ROLE_WORKER]);
+            break;
+            case User::ROLE_BRIGADIER:
+                $query->andWhere(['role' => User::ROLE_BRIGADIER]);
+            break;
+            case User::ROLE_MANAGER:
+                $query->andWhere(['role' => User::ROLE_MANAGER]);
+            break;
+        }
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => false

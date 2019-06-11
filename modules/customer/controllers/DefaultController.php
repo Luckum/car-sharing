@@ -8,6 +8,7 @@ use app\modules\customer\models\OperatorLoginForm;
 use app\modules\api\models\Car;
 use app\modules\api\models\Geo;
 use yii\data\ArrayDataProvider;
+use yii\web\Response;
 
 use app\models\User;
 
@@ -102,5 +103,28 @@ class DefaultController extends SiteController
         return $this->render('access', [
             'model' => $model,
         ]);
+    }
+    
+    public function actionPasswordReset()
+    {
+        $this->viewPath = '@app/views/site';
+        return parent::actionPasswordReset();
+    }
+    
+    public function actionGetCoordinates()
+    {
+        $cars_model = new Car();
+        $cars_model->getData();
+        $ret = [];
+        
+        foreach ($cars_model->cars as $car) {
+            $ret[$car->car_id] = [
+                'lat' => $car->lat,
+                'lon' => $car->lon
+            ];
+        }
+        
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $ret;
     }
 }

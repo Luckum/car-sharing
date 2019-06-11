@@ -10,18 +10,19 @@ use app\modules\api\models\Car;
 <?php
 if ($cars_model) {
     $car_loc = Car::instance();
+    $placemark = 'placemark_';
     $script = '
     $(document).ready(function () {
         $("#map-container").html("");
         ymaps.ready(init);
-        function init(){ 
+        function init() { 
             var myMap = new ymaps.Map("map-container", {
                 center: [60.00276950, 30.28266140],
                 zoom: 13
             });';
     foreach ($cars_model->cars as $car) {
         $script .= "
-            myMap.geoObjects.add(new ymaps.GeoObject(
+            var placemark_" . $car->car_id . " = new ymaps.GeoObject(
                 {
                     geometry: {
                         type: 'Point',
@@ -35,9 +36,23 @@ if ($cars_model) {
                 {
                     preset: 'islands#redStretchyIcon'
                 }
-            ));";
+            )
+            myMap.geoObjects.add(placemark_" . $car->car_id . ");
+        ";
     }
     $script .= '        
+            setTimeout(function movePoint () {
+                $.ajax({
+                    url: "/get-coordinates",
+                    type: "POST",
+                    success: function(data) {
+                        $.each(data, function(car_id, coordinates) {
+                            eval("placemark_" + car_id).geometry.setCoordinates([coordinates.lat, coordinates.lon]);
+                        });
+                    }
+                });
+                setTimeout(movePoint, 5000);
+            }, 5000);
         }
     })';
     $this->registerJs($script, $this::POS_END);
